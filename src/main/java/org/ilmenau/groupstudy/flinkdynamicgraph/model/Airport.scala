@@ -15,16 +15,16 @@ package org.ilmenau.groupstudy.flinkdynamicgraph.model
     Tz 		database time zone. Timezone in "tz" (Olson) format, eg. "America/Los_Angeles".
     Type		Type of the airport. Value "airport" for air terminals, "station" for train stations, "port" for ferry terminals and "unknown" if not known. In airports.csv, only type=airport is included.
   */
-case class Airports(airportID: Integer,
-                    name: String,
-                    city: String,
-                    country: String,
-                    IATA: String,
-                    ICAO: String,
-                    latitude: Double,
-                    longitude: Double,
-                    altitude: Integer,
-                    timezone: String,
-                    DST: String,
-                    tz: String,
-                    airportType: String)
+case class Airport(airportID: Integer,
+                   name: String,
+                   city: String,
+                   country: String,
+                   IATA: String,
+                   ICAO: String,
+                   latitude: Double,
+                   longitude: Double,
+                   altitude: Integer,
+                   timezone: String,
+                   DST: String,
+                   tz: String,
+                   airportType: String)

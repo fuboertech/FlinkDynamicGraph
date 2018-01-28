@@ -10,11 +10,11 @@ package org.ilmenau.groupstudy.flinkdynamicgraph.model
     Country	Country or territory where airline is incorporated.
     Active		"Y" if the airline is or has until recently been operational, "N" if it is defunct. This field is not reliable: in particular, major airlines that stopped flying long ago, but have not had their IATA code reassigned (eg. Ansett/AN), will incorrectly show as "Y".
   */
-case class Airlines(airlineID: Integer,
-                    name: String,
-                    alias: String,
-                    IATA: String,
-                    ICAO: String,
-                    callsign: String,
-                    country: String,
-                    active: String)
+case class Airline(airlineID: Integer,
+                   name: String,
+                   alias: String,
+                   IATA: String,
+                   ICAO: String,
+                   callsign: String,
+                   country: String,
+                   active: String)

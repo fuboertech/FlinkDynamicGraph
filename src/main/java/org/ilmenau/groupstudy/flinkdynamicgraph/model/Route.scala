@@ -11,12 +11,12 @@ package org.ilmenau.groupstudy.flinkdynamicgraph.model
     Stops				Number of stops on this flight ("0" for direct)
     Equipment			3-letter codes for plane type(s) generally used on this flight, separated by spaces
   */
-case class Routes(airline: String,
-                  airlineID: Integer,
-                  sourceAirport: String,
-                  sourceAirportID: Integer,
-                  destAirport: String,
-                  destAirportID: Integer,
-                  codeshare: String,
-                  stops: Integer,
-                  equipment: String)
+case class Route(airline: String,
+                 airlineID: Integer,
+                 sourceAirport: String,
+                 sourceAirportID: Integer,
+                 destAirport: String,
+                 destAirportID: Integer,
+                 codeshare: String,
+                 stops: Integer,
+                 equipment: String)
