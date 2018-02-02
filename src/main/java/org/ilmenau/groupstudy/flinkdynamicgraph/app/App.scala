@@ -1,7 +1,6 @@
 package org.ilmenau.groupstudy.flinkdynamicgraph.app
 
 import org.apache.flink.api.scala.ExecutionEnvironment
-import org.apache.flink.graph.library.link_analysis.PageRank
 import org.apache.flink.streaming.api.scala._
 import org.ilmenau.groupstudy.flinkdynamicgraph.generator.DataGenerator
 import org.ilmenau.groupstudy.flinkdynamicgraph.graph.AirlinesGraph
