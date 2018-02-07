@@ -5,7 +5,7 @@
   <artifactId>flink-dynamic-graph</artifactId>
   <version>1.0-SNAPSHOT</version>
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
+    <sourceDirectory>src/main/scala</sourceDirectory>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -63,28 +63,6 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-test-utils_2.11</artifactId>
-      <version>1.3.0</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>flink-test-utils-junit</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>junit</artifactId>
-          <groupId>junit</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>curator-test</artifactId>
-          <groupId>org.apache.curator</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-  </dependencies>
   <properties>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
