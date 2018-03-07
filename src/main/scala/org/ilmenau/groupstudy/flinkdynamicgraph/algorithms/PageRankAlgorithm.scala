@@ -1,46 +1,78 @@
 package org.ilmenau.groupstudy.flinkdynamicgraph.algorithms
 
-import org.apache.flink.graph.Edge
-import org.apache.flink.graph.library.link_analysis.PageRank
+import org.apache.flink.graph.{Edge, Vertex}
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRank
 import org.apache.flink.graph.scala.Graph
 import org.apache.flink.types.DoubleValue
 import org.apache.flink.api.scala._
 import org.ilmenau.groupstudy.flinkdynamicgraph.graph.AbstractGraph
 import org.ilmenau.groupstudy.flinkdynamicgraph.model.data.Airport
+import org.apache.flink.api.java.DataSet
 
 import scala.collection.JavaConverters._
 
 object PageRankAlgorithm {
 
-  def runClassic(graph: Graph[Integer, Airport, Integer]): Seq[(Integer, DoubleValue)] = {
-    val result = graph.run(new PageRank[Integer, Airport, Integer](0.85,  20, 0.001)).collect().asScala.toSeq
+  def runClassic(graph: Graph[Integer, Airport, Integer], border: java.util.List[scala.Tuple2[Integer, DoubleValue]] = null): Seq[(Integer, DoubleValue)]  = {
+    val result = graph.run(new org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRank[Integer, Airport, Integer](0.85,  100, border)).collect().asScala.toSeq
     result.map(f => Tuple2[Integer, DoubleValue](f.getVertexId0,  f.getPageRankScore))
   }
 
   // TODO: Not working properly 
-  def runDynamic(graph: AbstractGraph, addedEdges: Seq[Edge[Integer, Integer]], firstPageRank: Seq[(Integer, DoubleValue)]): Seq[(Integer, DoubleValue)] = {
-    var vc: Seq[Integer] = addedEdges.map(e => e.getTarget).union(addedEdges.map(e => e.getSource)).distinct
-    var vb: Seq[Integer] = graph.get.getEdges.filter(e => vc.contains(e.getTarget)).map(e => e.getSource).collect().distinct
-    var vq: Seq[Integer] = vc.distinct
-    var vu = graph.get.getVertices.filter(v => !vc.contains(v.getId)).map(v => v.getId).collect()
+  def runDynamic(graph: Graph[Integer, Airport, Integer], addedEdges: Seq[Edge[Integer, Integer]], firstPageRank: Seq[(Integer, DoubleValue)]): Seq[(Integer, DoubleValue)] = {
+    val output = new StringBuilder
+
+    var vc: Seq[Integer] = Seq.range(12,20).map(i=>new Integer(i))//addedEdges.map(e => e.getSource).distinct//union(addedEdges.map(e => e.getSource)).distinct
+    var vb: Seq[Integer] = Seq()//graph.getEdges.filter(e => vc.contains(e.getTarget)).map(e => e.getSource).collect().diff(vc).distinct
+    var vq: Seq[Integer] = Seq()//vc.distinct
+    var vu = graph.getVertices.filter(v => !vc.contains(v.getId)).map(v => v.getId).collect()
+    output.append("\nvc: " + vc.sortBy(f => f.intValue()))
     while (vc.nonEmpty) {
-      vc = graph.get.getEdges
+      vq = vq.union(vc).distinct
+      vc = graph.getEdges
         .filter(e => vc.contains(e.getSource))
         .filter(e => vu.contains(e.getTarget))
         .map(e => e.getTarget).distinct().collect()
-      vu = vu.filterNot(v => vc.contains(v))
-      vq = vq.union(vc).distinct
+      output.append("\nvu: " + vu.sortBy(f => f.intValue()))
+      output.append("\nvc: " + vc.sortBy(f => f.intValue()))
+      vu = vu.diff(vc)
     }
-    val refs = vu.filter(v => vq.contains(v))
-    vu = vu.filterNot(v => refs.contains(v))
-    vb = vb.union(refs)
 
-    val q = vq.union(vb)
-    val subgraph: Graph[Integer, Airport, Integer] = graph.get.subgraph(v => q.contains(v.getId),
-      e => q.contains(e.getSource) && q.contains(e.getTarget))
+    output.append("\nvu: " + vu.sortBy(f => f.intValue()))
+    output.append("\nvq: " + vq.sortBy(f => f.intValue()))
+    val childrens = graph.getEdges
+      .filter(e => vu.contains(e.getSource))
+      .filter(e => vq.contains(e.getTarget))
+      .map(e => e.getSource).distinct().collect()
 
-    val subgraphPageRank = runClassic(subgraph)
+    vu = vu.diff(childrens)
+    vb = vb.union(childrens).distinct
+    output.append("\nvu: " + vu.sortBy(f => f.intValue()))
+    output.append("\nvb: " + vb.sortBy(f => f.intValue()))
+
+    val q = vq.union(vb).distinct
+    output.append("\nq: " + q.sortBy(f => f.intValue()))
+    val subgraph: Graph[Integer, Airport, Integer] = graph.subgraph(v => q.contains(v.getId),
+        e => q.contains(e.getSource) && q.contains(e.getTarget))
+    output.append("\nsgv:"+subgraph.getVertices.collect().toString())
+    output.append("\nsge:"+subgraph.getEdges.collect().toString())
+    output.append("\ngrv: "+graph.getEdges.collect().toString())
+    println(output.result())
+
+    firstPageRank.foreach(p => {
+      if (vu.union(vb).contains(p._1))
+        p._2.setValue(p._2.getValue * 0.4403279992)
+    })
+    val subgraphPageRank = runClassic(subgraph, firstPageRank.filter(p => vb.contains(p._1)).asJava).filterNot(p => vb.contains(p._1))
+
+    //val subgraphResult = subgraphPageRank.filterNot(x => vb.contains(x._1)).foreach(x => x._2.setValue(x._2.getValue * scale))
+
     val fullPageRank = firstPageRank.filterNot(t => subgraphPageRank.map(p => p._1).contains(t._1)).union(subgraphPageRank)
+
+    firstPageRank.foreach(println)
+    println()
+    subgraphPageRank.foreach(println)
+
     fullPageRank
   }
 

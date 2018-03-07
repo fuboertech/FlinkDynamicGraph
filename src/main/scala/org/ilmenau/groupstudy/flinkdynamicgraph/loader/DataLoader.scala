@@ -14,6 +14,8 @@ object DataLoader {
 
   private var _airports: DataSet[Airport] = _
 
+  private var _testGraphEdges: DataSet[Route] = _
+
   def load(env: ExecutionEnvironment): Unit = {
     _routes = env.readCsvFile[Route](
       getPath("/routes.dat"))
@@ -24,6 +26,9 @@ object DataLoader {
       getPath("/airports.dat"),
       //lenient=true,
       quoteCharacter = '\"', includedFields = 0 to 12 toArray)
+
+    _testGraphEdges = env.readCsvFile[Route](
+      getPath("/test_graph_edges.dat"))
   }
 
   def routes: DataSet[Route] = _routes
@@ -33,6 +38,8 @@ object DataLoader {
   def airports: DataSet[Airport] = _airports
 
   def airport(airportId: Int): Airport = _airports.filter(a => a.airportID == airportId).collect().head
+
+  def testGraphEdtes: DataSet[Route] = _testGraphEdges
 
   private def getPath(resourceName: String): String =  {
     var path = ""
