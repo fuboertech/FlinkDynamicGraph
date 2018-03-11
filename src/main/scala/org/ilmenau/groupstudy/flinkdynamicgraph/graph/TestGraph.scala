@@ -43,7 +43,7 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
     println("Graph edges: " + graph.getEdges.count() + "\n")
 
     //val cm = ChangesModel[Seq[Edge[Integer, Integer]],Seq[Vertex[Integer, Airport]]](ChangeModel(e,v), null)
-    val dynamicPageRank = PageRankAlgorithm.runDynamic(graph, e, _fullPageRank)
+    val dynamicPageRank = PageRankAlgorithm.runDynamic(graph, e, _fullPageRank, env)
     val classicPageRnnk = PageRankAlgorithm.runClassic(graph)
     println("dyn: " + dynamicPageRank.size + "; classic: " + classicPageRnnk.size)
 

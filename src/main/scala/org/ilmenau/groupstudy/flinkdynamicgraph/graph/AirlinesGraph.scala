@@ -33,7 +33,7 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
     graph = graph.addEdges(addedEdges.toList)
     println("Graph edges: " + graph.getEdges.count() + "\n")
 
-    val dynamicPageRank = PageRankAlgorithm.runDynamic(graph, addedEdges, _fullPageRank).toSeq
+    val dynamicPageRank = PageRankAlgorithm.runDynamic(graph, addedEdges, _fullPageRank, env).toSeq
     val classicPageRnnk = PageRankAlgorithm.runClassic(graph)
     println("Count dynamic: "+ dynamicPageRank.size + "; classic: " + classicPageRnnk.size)
 

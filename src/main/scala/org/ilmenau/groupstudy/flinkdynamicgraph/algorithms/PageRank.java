@@ -3,12 +3,7 @@ package org.ilmenau.groupstudy.flinkdynamicgraph.algorithms;
 
 import org.apache.flink.api.common.aggregators.ConvergenceCriterion;
 import org.apache.flink.api.common.aggregators.DoubleSumAggregator;
-import org.apache.flink.api.common.functions.CoGroupFunction;
-import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.common.functions.RichJoinFunction;
-import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.common.functions.*;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
@@ -25,9 +20,7 @@ import org.apache.flink.graph.asm.degree.annotate.directed.VertexDegrees;
 import org.apache.flink.graph.asm.degree.annotate.directed.VertexDegrees.Degrees;
 import org.apache.flink.graph.asm.result.PrintableResult;
 import org.apache.flink.graph.asm.result.UnaryResult;
-import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.Functions.SumScore;
 import org.apache.flink.graph.library.link_analysis.HITS;
-import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRank.Result;
 import org.apache.flink.graph.utils.GraphUtils;
 import org.apache.flink.graph.utils.Murmur3_32;
 import org.apache.flink.graph.utils.proxy.GraphAlgorithmWrappingDataSet;
@@ -35,9 +28,13 @@ import org.apache.flink.types.DoubleValue;
 import org.apache.flink.types.LongValue;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.Preconditions;
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.Functions.SumScore;
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRank.Result;
+import scala.collection.JavaConverters.*;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Optional;
 
 import static org.apache.flink.api.common.ExecutionConfig.PARALLELISM_DEFAULT;
 
@@ -46,10 +43,10 @@ import static org.apache.flink.api.common.ExecutionConfig.PARALLELISM_DEFAULT;
  * transmitted over in-edges. Each vertex's score is divided evenly among
  * out-edges. High-scoring vertices are linked to by other high-scoring
  * vertices; this is similar to the 'authority' score in {@link HITS}.
- *
+ * <p>
  * http://ilpubs.stanford.edu:8090/422/1/1999-66.pdf
  *
- * @param <K> graph ID type
+ * @param <K>  graph ID type
  * @param <VV> vertex value type
  * @param <EV> edge value type
  */
@@ -65,7 +62,7 @@ public class PageRank<K, VV, EV>
     // Required configuration
     private final double dampingFactor;
 
-    private java.util.List<scala.Tuple2<Integer, DoubleValue>> borderVerticesPageRanks;
+    private final DataSet<scala.Tuple2<Integer, DoubleValue>> borderVerticesPageRanks;
 
     private int maxIterations;
 
@@ -78,9 +75,9 @@ public class PageRank<K, VV, EV>
      * PageRank with a fixed number of iterations.
      *
      * @param dampingFactor probability of following an out-link, otherwise jump to a random vertex
-     * @param iterations fixed number of iterations
+     * @param iterations    fixed number of iterations
      */
-    public PageRank(double dampingFactor, int iterations, java.util.List<scala.Tuple2<Integer, DoubleValue>> borderVerticesPageRanks) {
+    public PageRank(double dampingFactor, int iterations, DataSet<scala.Tuple2<Integer, DoubleValue>> borderVerticesPageRanks) {
         this(dampingFactor, iterations, Double.MAX_VALUE, borderVerticesPageRanks);
     }
 
@@ -88,10 +85,10 @@ public class PageRank<K, VV, EV>
      * PageRank with a convergence threshold. The algorithm terminates when the
      * change in score over all vertices falls to or below the given threshold value.
      *
-     * @param dampingFactor probability of following an out-link, otherwise jump to a random vertex
+     * @param dampingFactor        probability of following an out-link, otherwise jump to a random vertex
      * @param convergenceThreshold convergence threshold for sum of scores
      */
-    public PageRank(double dampingFactor, double convergenceThreshold, java.util.List<scala.Tuple2<Integer, DoubleValue>> borderVerticesPageRanks) {
+    public PageRank(double dampingFactor, double convergenceThreshold, DataSet<scala.Tuple2<Integer, DoubleValue>> borderVerticesPageRanks) {
         this(dampingFactor, Integer.MAX_VALUE, convergenceThreshold, borderVerticesPageRanks);
     }
 
@@ -101,11 +98,11 @@ public class PageRank<K, VV, EV>
      * the change in score over all vertices falls to or below the given
      * threshold value.
      *
-     * @param dampingFactor probability of following an out-link, otherwise jump to a random vertex
-     * @param maxIterations maximum number of iterations
+     * @param dampingFactor        probability of following an out-link, otherwise jump to a random vertex
+     * @param maxIterations        maximum number of iterations
      * @param convergenceThreshold convergence threshold for sum of scores
      */
-    public PageRank(double dampingFactor, int maxIterations, double convergenceThreshold, java.util.List<scala.Tuple2<Integer, DoubleValue>> borderVerticesPageRanks) {
+    public PageRank(double dampingFactor, int maxIterations, double convergenceThreshold, DataSet<scala.Tuple2<Integer, DoubleValue>> borderVerticesPageRanks) {
         Preconditions.checkArgument(0 < dampingFactor && dampingFactor < 1,
                 "Damping factor must be between zero and one");
         Preconditions.checkArgument(maxIterations > 0, "Number of iterations must be greater than zero");
@@ -138,7 +135,7 @@ public class PageRank<K, VV, EV>
     protected boolean mergeConfiguration(GraphAlgorithmWrappingDataSet other) {
         Preconditions.checkNotNull(other);
 
-        if (! PageRank.class.isAssignableFrom(other.getClass())) {
+        if (!PageRank.class.isAssignableFrom(other.getClass())) {
             return false;
         }
 
@@ -161,6 +158,8 @@ public class PageRank<K, VV, EV>
         DataSet<Vertex<K, Degrees>> vertexDegree = input
                 .run(new VertexDegrees<K, VV, EV>()
                         .setParallelism(parallelism));
+
+        vertexDegree.collect().forEach(x -> System.out.println(x.f0 + "::: " + x.f1));
 
         // vertex count
         DataSet<LongValue> vertexCount = GraphUtils.count(vertexDegree);
@@ -188,17 +187,19 @@ public class PageRank<K, VV, EV>
                 .name("Initialize scores");
 
         if (borderVerticesPageRanks != null) {
-            borderVerticesPageRanks.forEach(x -> {
-                try {
-                    initialScores.collect().forEach(y -> {
-                        if (y.f0.equals(x._1)) {
-                            y.f1.setValue(y.f1.getValue() /x._2.getValue());
+            initialScores = initialScores.leftOuterJoin(borderVerticesPageRanks).where(0)              // key of the first input (tuple field 0)
+                    .equalTo(0)            // key of the second input (tuple field 1)
+                    .with(new JoinFunction<Tuple2<K, DoubleValue>, scala.Tuple2<Integer, DoubleValue>, Tuple2<K, DoubleValue>>() {
+                        @Override
+                        public Tuple2<K, DoubleValue> join(Tuple2<K, DoubleValue> first, scala.Tuple2<Integer, DoubleValue> second) throws Exception {
+                            if ((second != null) && (first.f0.equals(second._1))) {
+                                System.out.println("ffff" + second._2.getValue());
+                                return new Tuple2<K, DoubleValue>((K) second._1, new DoubleValue(second._2.getValue()));
+                            }
+                            return first;
                         }
                     });
-                } catch (Exception aE) {
-                    aE.printStackTrace();
-                }
-            });
+            initialScores.collect().forEach(x -> System.out.println(x.f0 + " kkk " + x.f1));
         }
 
         IterativeDataSet<Tuple2<K, DoubleValue>> iterative = initialScores
@@ -246,7 +247,8 @@ public class PageRank<K, VV, EV>
                     .setParallelism(parallelism)
                     .name("Change in scores");
 
-            iterative.registerAggregationConvergenceCriterion(CHANGE_IN_SCORES, new DoubleSumAggregator(), new ScoreConvergence(convergenceThreshold));
+            iterative.registerAggregationConvergenceCriterion(CHANGE_IN_SCORES, new DoubleSumAggregator(),
+                    new ScoreConvergence(convergenceThreshold));
         } else {
             passThrough = adjustedScores;
         }
@@ -261,7 +263,7 @@ public class PageRank<K, VV, EV>
     /**
      * Remove the unused original edge value and extract the out-degree.
      *
-     * @param <T> ID type
+     * @param <T>  ID type
      * @param <ET> edge value type
      */
     @ForwardedFields("0; 1")
@@ -380,7 +382,7 @@ public class PageRank<K, VV, EV>
      * Each iteration the per-vertex scores are adjusted with the damping
      * factor. Each score is multiplied by the damping factor then added to the
      * probability of a "random hop", which is one minus the damping factor.
-     *
+     * <p>
      * This operation also accounts for 'sink' vertices, which have no
      * out-edges to project score to. The sink scores are computed by taking
      * one minus the sum of vertex scores, which also includes precision error.
