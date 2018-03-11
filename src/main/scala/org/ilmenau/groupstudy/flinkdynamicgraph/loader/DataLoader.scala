@@ -27,8 +27,8 @@ object DataLoader {
       //lenient=true,
       quoteCharacter = '\"', includedFields = 0 to 12 toArray)
 
-    _testGraphEdges = env.readCsvFile[Route](
-      getPath("/test_graph_edges.dat"))
+//    _testGraphEdges = env.readCsvFile[Route](
+//      getPath("/test_graph_edges.dat"))
   }
 
   def routes: DataSet[Route] = _routes
@@ -39,7 +39,7 @@ object DataLoader {
 
   def airport(airportId: Int): Airport = _airports.filter(a => a.airportID == airportId).collect().head
 
-  def testGraphEdtes: DataSet[Route] = _testGraphEdges
+//  def testGraphEdtes: DataSet[Route] = _testGraphEdges
 
   private def getPath(resourceName: String): String =  {
     var path = ""

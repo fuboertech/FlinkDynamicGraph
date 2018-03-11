@@ -19,17 +19,17 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
 
   def construct(): Unit = {
 
-    edges = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, j.airlineID))
+//    edges = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, j.airlineID))
 
     // from: source airport id, to: dest airport id, value: airlineID
     val vertices = env.fromCollection(Seq.range(1,12).union(Seq.range(20,24)))
-      .map(a => new Vertex(new Integer(a), Airport(0,"","","","","",0,0,0,"","","","")))
+      .map(a => new Vertex(new Integer(a), Double.PositiveInfinity))
 
 
     val e = edges.filter(e => !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getSource) &&
       !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getTarget))
 
-    graph = Graph.fromDataSet(vertices, e, env)
+    graph = Graph.fromDataSet[Integer, Double, Integer](vertices, edges, env)
     _fullPageRank = PageRankAlgorithm.runClassic(graph)
   }
 
@@ -37,7 +37,7 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
     val e = edges.filter(e => Seq.range(12, 20).map(i=>new Integer(i)).contains(e.getSource) ||
       Seq.range(12, 20).map(i=>new Integer(i)).contains(e.getTarget)).collect()
     val v = env.fromCollection(Seq.range(12,20).map(i=>new Integer(i))
-      .map(a => new Vertex(a, Airport(0, "a", "b", "c", "d", "e", 0, 0, 0, "f", "g", "h", "i")))).collect()
+      .map(a => new Vertex(a, 0.0))).collect()
 
     graph = graph.addVertices(v.toList).addEdges(e.toList).subgraph(v => true, e => true)
     println("Graph edges: " + graph.getEdges.count() + "\n")

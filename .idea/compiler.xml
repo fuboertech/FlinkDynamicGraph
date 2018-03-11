@@ -10,8 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="flink-dynamic-graph" target="1.5" />
-      <module name="FlinkDynamicGraph" target="1.5" />
+      <module name="flink-dynamic-graph" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

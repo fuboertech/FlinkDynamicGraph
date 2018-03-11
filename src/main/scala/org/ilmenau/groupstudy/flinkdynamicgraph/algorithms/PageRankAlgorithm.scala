@@ -6,20 +6,19 @@ import org.apache.flink.graph.scala.Graph
 import org.apache.flink.types.DoubleValue
 import org.apache.flink.api.scala._
 import org.ilmenau.groupstudy.flinkdynamicgraph.graph.AbstractGraph
-import org.ilmenau.groupstudy.flinkdynamicgraph.model.data.Airport
 import org.apache.flink.api.java.DataSet
 
 import scala.collection.JavaConverters._
 
 object PageRankAlgorithm {
 
-  def runClassic(graph: Graph[Integer, Airport, Integer], border: java.util.List[scala.Tuple2[Integer, DoubleValue]] = null): Seq[(Integer, DoubleValue)]  = {
-    val result = graph.run(new org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRank[Integer, Airport, Integer](0.85,  100, border)).collect().asScala.toSeq
+  def runClassic(graph: Graph[Integer, Double, Integer], border: java.util.List[scala.Tuple2[Integer, DoubleValue]] = null): Seq[(Integer, DoubleValue)]  = {
+    val result = graph.run(new org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRank[Integer, Double, Integer](0.85,  100, border)).collect().asScala.toSeq
     result.map(f => Tuple2[Integer, DoubleValue](f.getVertexId0,  f.getPageRankScore))
   }
 
   // TODO: Not working properly 
-  def runDynamic(graph: Graph[Integer, Airport, Integer], addedEdges: Seq[Edge[Integer, Integer]], firstPageRank: Seq[(Integer, DoubleValue)]): Seq[(Integer, DoubleValue)] = {
+  def runDynamic(graph: Graph[Integer, Double, Integer], addedEdges: Seq[Edge[Integer, Integer]], firstPageRank: Seq[(Integer, DoubleValue)]): Seq[(Integer, DoubleValue)] = {
     val output = new StringBuilder
 
     var vc: Seq[Integer] = Seq.range(12,20).map(i=>new Integer(i))//addedEdges.map(e => e.getSource).distinct//union(addedEdges.map(e => e.getSource)).distinct
@@ -52,7 +51,7 @@ object PageRankAlgorithm {
 
     val q = vq.union(vb).distinct
     output.append("\nq: " + q.sortBy(f => f.intValue()))
-    val subgraph: Graph[Integer, Airport, Integer] = graph.subgraph(v => q.contains(v.getId),
+    val subgraph: Graph[Integer, Double, Integer] = graph.subgraph(v => q.contains(v.getId),
         e => q.contains(e.getSource) && q.contains(e.getTarget))
     output.append("\nsgv:"+subgraph.getVertices.collect().toString())
     output.append("\nsge:"+subgraph.getEdges.collect().toString())
