@@ -34,17 +34,17 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
   }
 
   override def addEdges(routes: Iterable[Route]): Unit = {
-//    val edges = env.fromCollection(routes)
-//      .map(j => new Edge(j.sourceAirportID, j.destAirportID, j.stops))
-//    val addedEdges = edges.collect()
-//    graph = graph.addEdges(addedEdges.toList)
-//    println("Graph edges: " + graph.getEdges.count() + "\n")
-//
-//    val dynamicPageRank = PageRankAlgorithm.runDynamic(graph, addedEdges, _fullPageRank).toSeq
-//    val classicPageRnnk = PageRankAlgorithm.runClassic(graph)
-//    println("Count dynamic: "+ dynamicPageRank.size + "; classic: " + classicPageRnnk.size)
+    val edges = env.fromCollection(routes)
+      .map(j => new Edge(j.sourceAirportID, j.destAirportID, j.stops))
+    val addedEdges = edges.collect()
+    graph = graph.addEdges(addedEdges.toList)
+    println("Graph edges: " + graph.getEdges.count() + "\n")
 
     val fullShortestPath = ShortestPathAlgorithm.run(graph)
+
+    val dynamicPageRank = PageRankAlgorithm.runDynamic(graph, addedEdges, _fullPageRank, env).toSeq
+    val classicPageRnnk = PageRankAlgorithm.runClassic(graph)
+    println("Count dynamic: "+ dynamicPageRank.size + "; classic: " + classicPageRnnk.size)
 
 //    env.fromCollection(tuples2).leftOuterJoin(DataLoader.airports).where(0).equalTo(0) {
 //      (airportIdWithPageRankValue, airport) =>

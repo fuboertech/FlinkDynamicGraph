@@ -22,7 +22,7 @@ object ShortestPathAlgorithm {
 
     singleSourceShortestPaths.collect().toSeq.map(f => Tuple2[Integer, DoubleValue](f.getId, new DoubleValue(f.getValue)))
   }
-  
+
 
   // --------------------------------------------------------------------------------------------
   //  Single Source Shortest Path UDFs
