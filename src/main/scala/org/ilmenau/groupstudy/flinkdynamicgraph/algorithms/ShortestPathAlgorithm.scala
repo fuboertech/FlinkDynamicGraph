@@ -4,45 +4,86 @@ import org.apache.flink.api.common.functions.MapFunction
 import org.apache.flink.graph.scala._
 import org.apache.flink.graph.spargel.{GatherFunction, MessageIterator, ScatterFunction}
 import org.apache.flink.graph.{Edge, Vertex}
-import org.apache.flink.api.java.DataSet
+//import org.apache.flink.graph.pregel.{ComputeFunction, MessageCombiner, MessageIterator}
 import org.apache.flink.types.DoubleValue
+
+
 
 import scala.collection.JavaConverters._
 
 
+
 object ShortestPathAlgorithm {
   def run(graph: Graph[Integer, Double, Integer]): Seq[(Integer, DoubleValue)] = {
-    // Execute the scatter-gather iteration
-    val result = graph.runScatterGatherIteration(new MinDistanceMessenger, new VertexDistanceUpdater, 3)
+    graph.getEdges.print()
+    val maxIterations = 5
 
-    // Extract the vertices as the result
+    val result = graph.runScatterGatherIteration(new MinDistanceMessenger, new VertexDistanceUpdater, maxIterations)
     val singleSourceShortestPaths = result.getVertices
-
+    result.getVertices
     singleSourceShortestPaths.print()
+//     val result = graph.runVertexCentricIteration(new SSSPComputeFunction, new SSSPCombiner, maxIterations)
+//    val result = graph.runVertexCentricIteration(new SSSPComputeFunction, null, maxIterations)
+
 
     singleSourceShortestPaths.collect().toSeq.map(f => Tuple2[Integer, DoubleValue](f.getId, new DoubleValue(f.getValue)))
   }
 
 
-  // --------------------------------------------------------------------------------------------
-  //  Single Source Shortest Path UDFs
-  // --------------------------------------------------------------------------------------------
+
+  // - - -  UDFs - - - //
+
+//  final class SSSPComputeFunction extends ComputeFunction[Integer, Double, Integer, Double] {
+//
+//    override def compute(vertex: Vertex[Integer, Double], messages: MessageIterator[Double]) = {
+//      var minDistance = if (vertex.getId.equals(srcId)) 0 else Double.MaxValue
+//
+//      while (messages.hasNext) {
+//        val msg = messages.next
+//        if (msg < minDistance) {
+//          minDistance = msg
+//        }
+//      }
+//
+//      if (vertex.getValue > minDistance) {
+//        setNewVertexValue(minDistance)
+//        for (edge: Edge[Integer, Integer] <- getEdges.asScala) {
+//          sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
+//        }
+//      }
+//    }
+//  }
+//
+//      // message combiner
+//      final class SSSPCombiner extends MessageCombiner[Integer, Double] {
+//
+//        override def combineMessages(messages: MessageIterator[Double]) {
+//
+//          var minDistance = Double.MaxValue
+//
+//          while (messages.hasNext) {
+//            val msg = messages.next
+//            if (msg < minDistance) {
+//              minDistance = msg
+//            }
+//          }
+//          sendCombinedMessage(minDistance)
+//        }
+//      }
 
 
-
-  /**
-    * Distributes the minimum distance associated with a given vertex among all
-    * the target vertices summed up with the edge's value.
-    */
+//  /**
+//    * Distributes the minimum distance associated with a given vertex among all
+//    * the target vertices summed up with the edge's value.
+//    */
   private final class MinDistanceMessenger extends ScatterFunction[Integer, Double, Double, Integer] {
 
     override def sendMessages(vertex: Vertex[Integer, Double]) {
-      if (vertex.getValue < Double.PositiveInfinity) {
-        for (edge: Edge[Integer, Integer] <- getEdges.asScala) {
-//          println(edge.getTarget)
-          if(edge.getTarget != -1)
-            sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
-        }
+      if (vertex.getValue == Double.PositiveInfinity)
+        vertex.setValue(0.0)
+
+      for (edge: Edge[Integer, Integer] <- getEdges.asScala) {
+        sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
       }
     }
   }

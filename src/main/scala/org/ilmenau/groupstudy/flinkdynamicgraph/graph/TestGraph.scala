@@ -6,6 +6,7 @@ import org.apache.flink.graph.{Edge, Vertex}
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.types.DoubleValue
 import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRankAlgorithm
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.ShortestPathAlgorithm
 import org.ilmenau.groupstudy.flinkdynamicgraph.loader.DataLoader
 import org.ilmenau.groupstudy.flinkdynamicgraph.model.data.{Airport, Route}
 //import org.apache.flink.api.scala._
@@ -14,12 +15,13 @@ import org.ilmenau.groupstudy.flinkdynamicgraph.model.{ChangeModel, ChangesModel
 class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionEnvironment) {
 
   private var _fullPageRank: Seq[(Integer, DoubleValue)] = _
+  private var _fullShortestPath: Seq[(Integer, DoubleValue)] = _
 
   var edges: DataSet[Edge[Integer, Integer]] = _
 
   def construct(): Unit = {
 
-//    edges = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, j.airlineID))
+    edges = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, j.airlineID))
 
     // from: source airport id, to: dest airport id, value: airlineID
     val vertices = env.fromCollection(Seq.range(1,12).union(Seq.range(20,24)))
@@ -30,7 +32,9 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
       !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getTarget))
 
     graph = Graph.fromDataSet[Integer, Double, Integer](vertices, edges, env)
-    _fullPageRank = PageRankAlgorithm.runClassic(graph)
+    //_fullPageRank = PageRankAlgorithm.runClassic(graph)
+
+    _fullShortestPath = ShortestPathAlgorithm.run(graph)
   }
 
   override def addEdges(routes: Iterable[Route]): Unit = {

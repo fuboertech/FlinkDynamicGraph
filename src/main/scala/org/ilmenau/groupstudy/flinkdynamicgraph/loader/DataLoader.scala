@@ -2,6 +2,7 @@ package org.ilmenau.groupstudy.flinkdynamicgraph.loader
 
 import java.io._
 
+import org.apache.flink.api.common.functions.MapFunction
 import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment}
 import org.apache.flink.streaming.api.scala._
 import org.ilmenau.groupstudy.flinkdynamicgraph.model.data.{Airline, Airport, Route}
@@ -27,11 +28,11 @@ object DataLoader {
       //lenient=true,
       quoteCharacter = '\"', includedFields = 0 to 12 toArray)
 
-//    _testGraphEdges = env.readCsvFile[Route](
-//      getPath("/test_graph_edges.dat"))
+    _testGraphEdges = env.readCsvFile[Route](
+      getPath("/test_graph_edges.dat"))
   }
 
-  def routes: DataSet[Route] = _routes
+  def routes: DataSet[Route] = _routes.filter(r => r.destAirportID != -1 && r.sourceAirportID != -1)
 
   def airlines: DataSet[Airline] = _airlines
 
@@ -39,7 +40,7 @@ object DataLoader {
 
   def airport(airportId: Int): Airport = _airports.filter(a => a.airportID == airportId).collect().head
 
-//  def testGraphEdtes: DataSet[Route] = _testGraphEdges
+  def testGraphEdtes: DataSet[Route] = _testGraphEdges
 
   private def getPath(resourceName: String): String =  {
     var path = ""

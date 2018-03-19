@@ -1,5 +1,6 @@
 package org.ilmenau.groupstudy.flinkdynamicgraph.graph
 
+import org.apache.flink.api.common.functions.MapFunction
 import org.apache.flink.api.scala.ExecutionEnvironment
 import org.apache.flink.graph.scala.Graph
 import org.apache.flink.graph.scala._
@@ -16,18 +17,22 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
   private var _fullPageRank: Seq[(Integer, DoubleValue)] = _
   private var _fullShortestPath: Seq[(Integer, DoubleValue)] = _
 
-  def construct(): Unit = {
 
+  def construct(): Unit = {
     // key: airport id, value: Airport object
     val vertices = DataLoader.airports.map(a => new Vertex(a.airportID, Double.PositiveInfinity))
 
     // val routesWithAirlines = DataLoader.routes.join(DataLoader.airlines).where(1).equalTo(0)
 
+    val start = 1
+    val end   = 5
+    val rnd = new scala.util.Random
     // from: source airport id, to: dest airport id, value: airlineID
-    val edges = DataLoader.routes.map(j => new Edge(j.sourceAirportID, j.destAirportID, j.airlineID))
+    val edges = DataLoader.routes.map(j => new Edge(j.sourceAirportID, j.destAirportID, new Integer(start + rnd.nextInt( (end - start) + 1 ))))
+    //val edges = DataLoader.routes.map(j => new Edge(j.sourceAirportID, j.destAirportID, j.stops))
     graph = Graph.fromDataSet[Integer, Double, Integer](vertices, edges, env)
 
-    graph.getVertices.print()
+//    graph.getVertices.print()
 
 //    _fullPageRank = PageRankAlgorithm.runClassic(graph)
     _fullShortestPath = ShortestPathAlgorithm.run(graph)

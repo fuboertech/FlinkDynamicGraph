@@ -23,8 +23,9 @@ object App {
     graph.construct()
     println(graph.get.getVertices.count())
 
-//    val g = new TestGraph(env)
-//    g.construct()
+//    val graph = new TestGraph(env)
+//    graph.construct()
+//    println(graph.get.getVertices.count())
 //    g.addEdges(null)
 
     // start process of changing graph by adding new routes every 5 seconds and finding PageRank
