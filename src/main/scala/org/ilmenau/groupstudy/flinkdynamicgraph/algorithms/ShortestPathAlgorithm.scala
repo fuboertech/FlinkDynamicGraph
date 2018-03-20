@@ -1,10 +1,15 @@
 package org.ilmenau.groupstudy.flinkdynamicgraph.algorithms
 
 import org.apache.flink.api.common.functions.MapFunction
+import org.apache.flink.api.scala.DataSet
 import org.apache.flink.graph.scala._
+import org.apache.flink.api.scala._
+
 import org.apache.flink.graph.spargel.{GatherFunction, MessageIterator, ScatterFunction}
 import org.apache.flink.graph.{Edge, Vertex}
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRankAlgorithm.runClassic
 //import org.apache.flink.graph.pregel.{ComputeFunction, MessageCombiner, MessageIterator}
+
 import org.apache.flink.types.DoubleValue
 
 
@@ -29,7 +34,71 @@ object ShortestPathAlgorithm {
     singleSourceShortestPaths.collect().toSeq.map(f => Tuple2[Integer, DoubleValue](f.getId, new DoubleValue(f.getValue)))
   }
 
+  def runDynamic(graph: Graph[Integer, Double, Integer], addedEdges: Seq[Edge[Integer, Integer]]): Seq[(Integer, DoubleValue)] = {
+    val output = new StringBuilder
 
+    //var vc: Seq[Integer] = Seq.range(12, 20).map(i => new Integer(i))
+    var vc: Seq[Integer] = addedEdges.map(e => e.getSource).distinct//union(addedEdges.map(e => e.getSource)).distinct
+    var vb: Seq[Integer] = Seq()
+    //graph.getEdges.filter(e => vc.contains(e.getTarget)).map(e => e.getSource).collect().diff(vc).distinct
+    var vq: Seq[Integer] = Seq()
+    //vc.distinct
+    var vu = graph.getVertices.filter(v => !vc.contains(v.getId)).map(v => v.getId).collect()
+    output.append("\nvc: " + vc.sortBy(f => f.intValue()))
+    while (vc.nonEmpty) {
+      vq = vq.union(vc).distinct
+      vc = graph.getEdges
+        .filter(e => vc.contains(e.getSource))
+        .filter(e => vu.contains(e.getTarget))
+        .map(e => e.getTarget).distinct().collect()
+      output.append("\nvu: " + vu.sortBy(f => f.intValue()))
+      output.append("\nvc: " + vc.sortBy(f => f.intValue()))
+      vu = vu.diff(vc)
+    }
+
+
+
+    output.append("\nvu: " + vu.sortBy(f => f.intValue()))
+    output.append("\nvq: " + vq.sortBy(f => f.intValue()))
+    val childrens = graph.getEdges
+      .filter(e => vu.contains(e.getSource))
+      .filter(e => vq.contains(e.getTarget))
+      .map(e => e.getSource).distinct().collect()
+
+    vu = vu.diff(childrens)
+    vb = vb.union(childrens).distinct
+    output.append("\nvu: " + vu.sortBy(f => f.intValue()))
+    output.append("\nvb: " + vb.sortBy(f => f.intValue()))
+
+    val q = vq.union(vb).distinct
+    output.append("\nq: " + q.sortBy(f => f.intValue()))
+
+    val subgraph: Graph[Integer, Double, Integer] = graph.subgraph(v => q.contains(v.getId),
+      e => q.contains(e.getSource) && q.contains(e.getTarget))
+
+    output.append("\nsgv:" + subgraph.getVertices.collect().toString())
+    output.append("\nsge:" + subgraph.getEdges.collect().toString())
+    output.append("\ngrv: " + graph.getEdges.collect().toString())
+
+    println(output.result())
+
+    //    firstPageRank.foreach(p => {
+    //      if (vb.contains(p._1))
+    //        p._2.setValue(p._2.getValue * 0.4403279992)
+    //    })
+
+    val maxIterations = 5
+
+    val result = subgraph.runScatterGatherIteration(new MinDistanceMessenger, new VertexDistanceUpdater, maxIterations)
+    val singleSourceShortestPaths = result.getVertices
+    result.getVertices
+    singleSourceShortestPaths.print()
+    //     val result = graph.runVertexCentricIteration(new SSSPComputeFunction, new SSSPCombiner, maxIterations)
+    //    val result = graph.runVertexCentricIteration(new SSSPComputeFunction, null, maxIterations)
+
+
+    singleSourceShortestPaths.collect().toSeq.map(f => Tuple2[Integer, DoubleValue](f.getId, new DoubleValue(f.getValue)))
+  }
 
   // - - -  UDFs - - - //
 

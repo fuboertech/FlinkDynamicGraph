@@ -17,7 +17,6 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
   private var _fullPageRank: Seq[(Integer, DoubleValue)] = _
   private var _fullShortestPath: Seq[(Integer, DoubleValue)] = _
 
-
   def construct(): Unit = {
     // key: airport id, value: Airport object
     val vertices = DataLoader.airports.map(a => new Vertex(a.airportID, Double.PositiveInfinity))
@@ -41,15 +40,16 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
   override def addEdges(routes: Iterable[Route]): Unit = {
     val edges = env.fromCollection(routes)
       .map(j => new Edge(j.sourceAirportID, j.destAirportID, j.stops))
-    val addedEdges = edges.collect()
+    val addedEdges = edges.collect().toSeq
     graph = graph.addEdges(addedEdges.toList)
     println("Graph edges: " + graph.getEdges.count() + "\n")
 
     val fullShortestPath = ShortestPathAlgorithm.run(graph)
+    val dynamicFullShortestPath = ShortestPathAlgorithm.runDynamic(graph, addedEdges)
 
-    val dynamicPageRank = PageRankAlgorithm.runDynamic(graph, addedEdges, _fullPageRank, env).toSeq
-    val classicPageRnnk = PageRankAlgorithm.runClassic(graph)
-    println("Count dynamic: "+ dynamicPageRank.size + "; classic: " + classicPageRnnk.size)
+   // val dynamicPageRank = PageRankAlgorithm.runDynamic(graph, addedEdges, _fullPageRank, env).toSeq
+    //val classicPageRnnk = PageRankAlgorithm.runClassic(graph)
+    //println("Count dynamic: "+ dynamicPageRank.size + "; classic: " + classicPageRnnk.size)
 
 //    env.fromCollection(tuples2).leftOuterJoin(DataLoader.airports).where(0).equalTo(0) {
 //      (airportIdWithPageRankValue, airport) =>
