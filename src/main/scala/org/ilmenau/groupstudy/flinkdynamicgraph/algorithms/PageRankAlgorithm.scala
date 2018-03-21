@@ -7,20 +7,24 @@ import org.apache.flink.types.DoubleValue
 import org.apache.flink.api.scala._
 import org.ilmenau.groupstudy.flinkdynamicgraph.graph.AbstractGraph
 import org.apache.flink.api.java.{Utils, DataSet => JavaDataSet}
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.util.PageRank
 
 
 import scala.collection.JavaConverters._
 
-object PageRankAlgorithm {
+class PageRankAlgorithm {
 
-  def runClassic(graph: Graph[Integer, Double, Integer], border: org.apache.flink.api.java.DataSet[scala.Tuple2[Integer, DoubleValue]] = null): Seq[(Integer, DoubleValue)]  = {
-    val result = graph.run(new org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRank[Integer, Double, Integer](0.85, 10000, 0.01, border)).collect().asScala.toSeq
-    result.map(f => Tuple2[Integer, DoubleValue](f.getVertexId0,  f.getPageRankScore))
+
+  private var _FullPageRank: Seq[(Integer, DoubleValue)] = _
+
+  def runClassic(graph: Graph[Integer, Integer, Integer], border: org.apache.flink.api.java.DataSet[scala.Tuple2[Integer, DoubleValue]] = null): Seq[(Integer, DoubleValue)] = {
+    val result = graph.run(new PageRank[Integer, Integer, Integer](0.85, 100, 0.001, border)).collect().asScala.toSeq
+    _FullPageRank = result.map(f => Tuple2[Integer, DoubleValue](f.getVertexId0, f.getPageRankScore))
+    _FullPageRank
   }
 
   // TODO: Not working properly 
-  def runDynamic(graph: Graph[Integer, Double, Integer], addedEdges: Seq[Edge[Integer, Integer]], firstPageRank: Seq[(Integer, DoubleValue)], env: ExecutionEnvironment): Seq[(Integer, DoubleValue)] = {
-
+  def runDynamic(graph: Graph[Integer, Integer, Integer], addedEdges: Seq[Edge[Integer, Integer]], env: ExecutionEnvironment): Seq[(Integer, DoubleValue)] = {
     val output = new StringBuilder
 
     var vc: Seq[Integer] = Seq.range(12, 20).map(i => new Integer(i))
@@ -42,8 +46,6 @@ object PageRankAlgorithm {
       vu = vu.diff(vc)
     }
 
-
-
     output.append("\nvu: " + vu.sortBy(f => f.intValue()))
     output.append("\nvq: " + vq.sortBy(f => f.intValue()))
     val childrens = graph.getEdges
@@ -56,14 +58,14 @@ object PageRankAlgorithm {
     output.append("\nvu: " + vu.sortBy(f => f.intValue()))
     output.append("\nvb: " + vb.sortBy(f => f.intValue()))
 
-    firstPageRank.foreach(p => {
+    _FullPageRank.foreach(p => {
       if (vu.contains(p._1)) {
-        p._2.setValue(p._2.getValue * firstPageRank.size / graph.numberOfVertices())
+        p._2.setValue(p._2.getValue * _FullPageRank.size / graph.numberOfVertices())
         println("vuuu: " + p._1)
       }
     })
 
-    firstPageRank.foreach(p => {
+    _FullPageRank.foreach(p => {
       if (vb.contains(p._1))
         p._2.setValue(p._2.getValue * graph.numberOfVertices() / vq.size)
     })
@@ -71,13 +73,12 @@ object PageRankAlgorithm {
     val q = vq.union(vb).distinct
     output.append("\nq: " + q.sortBy(f => f.intValue()))
 
-    val subgraph: Graph[Integer, Double, Integer] = graph.subgraph(v => q.contains(v.getId),
-        e => q.contains(e.getSource) && q.contains(e.getTarget))
+    val subgraph: Graph[Integer, Integer, Integer] = graph.subgraph(v => q.contains(v.getId),
+      e => q.contains(e.getSource) && q.contains(e.getTarget))
     output.append("\nsgv:" + subgraph.getVertices.collect().toString())
     output.append("\nsge:" + subgraph.getEdges.collect().toString())
     output.append("\ngrv: " + graph.getEdges.collect().toString())
-
-    println(output.result())
+    //println(output.result())
 
 //    firstPageRank.foreach(p => {
 //      if (vb.contains(p._1))
@@ -87,7 +88,7 @@ object PageRankAlgorithm {
 
     val toJavaDataSetMethod = scalaDataSetClass.getDeclaredMethod("javaSet") // no parameters
     toJavaDataSetMethod.setAccessible(true)
-    val border:  DataSet[scala.Tuple2[Integer, DoubleValue]] = env.fromCollection(firstPageRank.filter(p => vb.contains(p._1)))
+    val border:  DataSet[scala.Tuple2[Integer, DoubleValue]] = env.fromCollection(_FullPageRank.filter(p => vb.contains(p._1)))
 
     val subgraphPageRank = runClassic(subgraph, toJavaDataSetMethod.invoke(border).asInstanceOf[org.apache.flink.api.java.DataSet[scala.Tuple2[Integer, DoubleValue]]]).filterNot(p => vb.contains(p._1))
 
@@ -96,7 +97,7 @@ object PageRankAlgorithm {
 //        p._2.setValue(p._2.getValue * 0.4375)
 //    })
 
-    firstPageRank.foreach(p => {
+    _FullPageRank.foreach(p => {
       if (vb.contains(p._1))
         p._2.setValue(p._2.getValue * vq.size /graph.numberOfVertices())
     })
@@ -107,12 +108,13 @@ object PageRankAlgorithm {
 
     //val subgraphResult = subgraphPageRank.filterNot(x => vb.contains(x._1)).foreach(x => x._2.setValue(x._2.getValue * scale))
 
-    val fullPageRank = firstPageRank.filterNot(t => subgraphPageRank.map(p => p._1).contains(t._1)).union(subgraphPageRank)
+    val fullPageRank = _FullPageRank.filterNot(t => subgraphPageRank.map(p => p._1).contains(t._1)).union(subgraphPageRank)
 
-    firstPageRank.foreach(println)
-    println()
-    subgraphPageRank.foreach(println)
+//    _FullPageRank.foreach(println)
+//    println()
+//    subgraphPageRank.foreach(println)
 
+    _FullPageRank = fullPageRank
     fullPageRank
   }
 

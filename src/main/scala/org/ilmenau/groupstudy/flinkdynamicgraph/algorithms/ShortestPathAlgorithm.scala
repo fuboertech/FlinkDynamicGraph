@@ -7,7 +7,6 @@ import org.apache.flink.api.scala._
 
 import org.apache.flink.graph.spargel.{GatherFunction, MessageIterator, ScatterFunction}
 import org.apache.flink.graph.{Edge, Vertex}
-import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRankAlgorithm.runClassic
 //import org.apache.flink.graph.pregel.{ComputeFunction, MessageCombiner, MessageIterator}
 
 import org.apache.flink.types.DoubleValue

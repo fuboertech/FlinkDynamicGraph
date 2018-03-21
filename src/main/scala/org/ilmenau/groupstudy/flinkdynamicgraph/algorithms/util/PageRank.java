@@ -1,4 +1,4 @@
-package org.ilmenau.groupstudy.flinkdynamicgraph.algorithms;
+package org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.util;
 
 
 import org.apache.flink.api.common.aggregators.ConvergenceCriterion;
@@ -28,13 +28,11 @@ import org.apache.flink.types.DoubleValue;
 import org.apache.flink.types.LongValue;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.Preconditions;
-import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.Functions.SumScore;
-import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.PageRank.Result;
-import scala.collection.JavaConverters.*;
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.util.Functions.SumScore;
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.util.PageRank.Result;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Optional;
 
 import static org.apache.flink.api.common.ExecutionConfig.PARALLELISM_DEFAULT;
 
@@ -159,7 +157,7 @@ public class PageRank<K, VV, EV>
                 .run(new VertexDegrees<K, VV, EV>()
                         .setParallelism(parallelism));
 
-        vertexDegree.collect().forEach(x -> System.out.println(x.f0 + "::: " + x.f1));
+        //vertexDegree.collect().forEach(x -> System.out.println(x.f0 + "::: " + x.f1));
 
         // vertex count
         DataSet<LongValue> vertexCount = GraphUtils.count(vertexDegree);
