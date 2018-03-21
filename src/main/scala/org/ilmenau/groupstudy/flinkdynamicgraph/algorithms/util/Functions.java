@@ -1,3 +1,10 @@
+package org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.util;
+
+import org.apache.flink.api.common.functions.ReduceFunction;
+import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.types.DoubleValue;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -15,13 +22,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.ilmenau.groupstudy.flinkdynamicgraph.algorithms;
-
-import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
-import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.types.DoubleValue;
 
 class Functions {
 
