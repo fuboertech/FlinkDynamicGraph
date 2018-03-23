@@ -25,7 +25,7 @@ object ConnectedComponentsAlgorithm {
   private var _disjointSet: DisjointDataSet[Integer] = _
 
   def runClassic(graph: Graph[Integer, Integer, Integer]): Seq[(Integer, Integer)] = {
-    val result = graph.run(new GSAConnectedComponents[Integer, Integer, Integer](99)).collect().asScala.toSeq.map(v => (v.getId, v.getValue))
+    val result = graph.run(new GSAConnectedComponents[Integer, Integer, Integer](100)).collect().asScala.toSeq.map(v => (v.getId, v.getValue))
     result
   }
 

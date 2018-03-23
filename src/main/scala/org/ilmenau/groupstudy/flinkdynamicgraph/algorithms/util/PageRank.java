@@ -33,6 +33,7 @@ import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.util.PageRank.Result;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.apache.flink.api.common.ExecutionConfig.PARALLELISM_DEFAULT;
 
@@ -347,7 +348,13 @@ public class PageRank<K, VV, EV>
                 Edge<T, LongValue> edge = edgeIterator.next();
 
                 output.f0 = edge.f1;
-                output.f1.setValue(vertex.iterator().next().f1.getValue() / edge.f2.getValue());
+                try {
+                    Tuple2<T, DoubleValue> next = vertex.iterator().next();
+                    output.f1.setValue(next.f1.getValue() / edge.f2.getValue());
+                } catch (NoSuchElementException aE) {
+                    System.out.println(vertex);
+                }
+
                 out.collect(output);
 
                 while (edgeIterator.hasNext()) {

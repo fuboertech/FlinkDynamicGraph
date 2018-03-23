@@ -44,8 +44,8 @@ object DataGenerator {
       val classicPageRank = pagerankAlg.runClassic(_graph.get)
       println("\n\n\n+++ classic PageRank size: " + classicPageRank.size)
 
-//      val dynamicPageRank = pagerankAlg.runDynamic(_graph.get, addedEdges, _graph.env).toSeq
-//      println("\n\n\n+++ dynamic PageRank size: " + dynamicPageRank.size)
+      val dynamicPageRank = pagerankAlg.runDynamic(_graph.get, addedEdges, _graph.env).toSeq
+      println("\n\n\n+++ dynamic PageRank size: " + dynamicPageRank.size)
 
       val classicConnectedComponents = ConnectedComponentsAlgorithm.runClassic(_graph.get)
       println("\n\n\n+++ classic ConnectedComponents size: " + classicConnectedComponents.size)

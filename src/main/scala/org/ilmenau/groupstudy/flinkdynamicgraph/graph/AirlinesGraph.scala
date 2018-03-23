@@ -16,20 +16,30 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
 
   def construct(): Unit = {
     // key: airport id, value: Airport object
-    //val vertices = DataLoader.airports.map(a => new Vertex(a.airportID, a))
+    val vertices = DataLoader.airports.map(a => new Vertex(a.airportID, new Integer(0)))
 
     // val routesWithAirlines = DataLoader.routes.join(DataLoader.airlines).where(1).equalTo(0)
 
     // from: source airport id, to: dest airport id, value: airlineID
-    val edges = DataLoader.routes.map(j => new Edge(j.sourceAirportID, j.destAirportID, j.airlineID))
+
+
+    // from: source airport id, to: dest airport id, value: airlineID
+    val edges = DataLoader.routes.map(j => new Edge(j.sourceAirportID, j.destAirportID, new Integer(0)))
 
 //    graph = Graph.fromDataSet(edges, new IdentityMapper[Integer](), env)
-    graph = Graph.fromDataSet(edges, new IdentityMapper[Integer](), env)
+    graph = Graph.fromDataSet[Integer, Integer, Integer](vertices, edges, env)
   }
+
+//  private def genRandomStopsNumber(): Integer = {
+//    val start = 1
+//    val end   = 5
+//    val rnd = new scala.util.Random
+//    new Integer(start + rnd.nextInt( (end - start) + 1 ))
+//  }
 
   override def addEdges(routes: Iterable[Route]): Seq[Edge[Integer, Integer]] = {
     val edges = env.fromCollection(routes)
-      .map(j => new Edge(j.sourceAirportID, j.destAirportID, j.airlineID))
+      .map(j => new Edge(j.sourceAirportID, j.destAirportID, new Integer(0)))
     val addedEdges = edges.collect()
     graph = graph.addEdges(addedEdges.toList)
     addedEdges
