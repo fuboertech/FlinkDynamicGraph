@@ -29,7 +29,8 @@ object App {
 
     //     start process of changing graph by adding new routes every 5 seconds and finding PageRank
     val streamEnv = StreamExecutionEnvironment.getExecutionEnvironment
-    DataGenerator.generate(streamEnv, graph, 10000)
+
+    DataGenerator.generate(streamEnv, graph, 1000)
     streamEnv.execute("Routes stream")
   }
 
