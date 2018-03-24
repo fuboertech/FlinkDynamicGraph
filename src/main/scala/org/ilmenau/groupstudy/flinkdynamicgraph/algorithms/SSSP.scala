@@ -12,23 +12,33 @@ import scala.collection.JavaConversions._
 
 
 object SSSP {
-  def runClassic(graph: Graph[Integer, Integer, Integer]): Seq[(Integer, Integer)] = {
+  var _classicSSSP: Graph[Integer, Integer, Integer] = _
+  var _dynamicSSSP: Graph[Integer, Integer, Integer] = _
+
+  def runClassic(graph: Graph[Integer, Integer, Integer]): Graph[Integer, Integer, Integer] = {
     val srcId = 1
 
     var modifiedGraph = graph
-    modifiedGraph = graph.mapVertices(v => if (v.getId.equals(srcId)) {
-      0
+    if (_classicSSSP == null) {
+      modifiedGraph = graph.mapVertices(v => if (v.getId.equals(srcId)) {
+        0
+      } else {
+        Integer.MAX_VALUE
+      })
     } else {
-      Integer.MAX_VALUE
-    })
+      modifiedGraph = _classicSSSP
+    }
 
     val maxIterations = 5
     val result = modifiedGraph.runScatterGatherIteration(new MinDistanceMessenger, new VertexDistanceUpdater, maxIterations)
 
+    _classicSSSP = result
+
     val singleSourceShortestPaths = result.getVertices
     singleSourceShortestPaths.print()
 
-    singleSourceShortestPaths.collect().toSeq.map(f => Tuple2[Integer, Integer](f.getId, f.getValue))
+    return result
+    //singleSourceShortestPaths.collect().toSeq.map(f => Tuple2[Integer, Integer](f.getId, f.getValue))
   }
 
   // --------------------------------------------------------------------------------------------
@@ -66,32 +76,39 @@ object SSSP {
   }
 
   // dynamic
-  def runDynamic(graph: Graph[Integer, Integer, Integer], addedEdges: Seq[Edge[Integer, Integer]]) = {
-    var modifiedGraph = graph
+  def runDynamic(graph: Graph[Integer, Integer, Integer], addedEdges: Seq[Edge[Integer, Integer]]): Graph[Integer, Integer, Integer] = {
     val srcId = 1
-
-    modifiedGraph = graph.mapVertices(v => if (v.getId.equals(srcId)) {
-      0
-    } else {
-      Integer.MAX_VALUE
-    })
-
-    val a =modifiedGraph.getVertices.count()
-    val b = modifiedGraph.getVertices.filter(v => v.getValue == Integer.MAX_VALUE).count()
-
     val maxIterations = 5
 
-    if(b == a-1){
-      modifiedGraph = modifiedGraph.runScatterGatherIteration(new MinDistanceMessenger, new VertexDistanceUpdater, maxIterations)
+    var modifiedGraph = graph
+    if (_dynamicSSSP == null) {
+      modifiedGraph = graph.mapVertices(v => if (v.getId.equals(srcId)) {
+        0
+      } else {
+        Integer.MAX_VALUE
+      })
+
+      val a =modifiedGraph.getVertices.count()
+      val b = modifiedGraph.getVertices.filter(v => v.getValue == Integer.MAX_VALUE).count()
+
+
+
+      if(b == a-1){
+        modifiedGraph = modifiedGraph.runScatterGatherIteration(new MinDistanceMessenger, new VertexDistanceUpdater, maxIterations)
+      }
+
+    } else {
+      modifiedGraph = _dynamicSSSP
     }
 
-
     modifiedGraph = modifiedGraph.runScatterGatherIteration(new RecalculateMessenger(addedEdges), new VertexDistanceUpdater, maxIterations)
+    _dynamicSSSP = modifiedGraph
 
     modifiedGraph.getVertices.print()
 
 
-    modifiedGraph.getVertices.collect().toSeq.map(f => Tuple2[Integer, Integer](f.getId, f.getValue))
+    //modifiedGraph.getVertices.collect().toSeq.map(f => Tuple2[Integer, Integer](f.getId, f.getValue))
+    return  modifiedGraph
   }
 
 

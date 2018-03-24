@@ -29,6 +29,7 @@ object DataGenerator {
 
     var pagerankAlg: PageRankAlgorithm = _
 
+
     // val connectedComponentsAlg: ConnectedComponentsAlgorithm = ConnectedComponentsAlgorithm
 
     protected def changeGraphModel(values: Iterable[Route]): Array[Route] = {
@@ -49,20 +50,20 @@ object DataGenerator {
       println("\n\n\n+++ dynamic PageRank size: " + dynamicPageRank.size)
 
 
-//      val classicConnectedComponents = ConnectedComponentsAlgorithm.runClassic(_graph.get)
-//      println("\n\n\n+++ classic ConnectedComponents size: " + classicConnectedComponents.size)
-//
-//      val dynamicConnectedComponents = ConnectedComponentsAlgorithm.runDynamic(_graph.get, addedEdges)
-//      println("\n\n\n+++ dynamic ConnectedComponents size: " + dynamicConnectedComponents.size)
+      val classicConnectedComponents = ConnectedComponentsAlgorithm.runClassic(_graph.get)
+      println("\n\n\n+++ classic ConnectedComponents size: " + classicConnectedComponents.size)
+
+      val dynamicConnectedComponents = ConnectedComponentsAlgorithm.runDynamic(_graph.get, addedEdges)
+      println("\n\n\n+++ dynamic ConnectedComponents size: " + dynamicConnectedComponents.size)
 
 
       //val fullShortestPath = ShortestPathAlgorithm.runClassic(_graph.get)
-      val fullShortestPath = SSSP.runClassic(_graph.get)
-      println("\n\n\n+++ classic ShortestPathAlgorithm size: " + fullShortestPath.size)
+      val classicSSSP = SSSP.runClassic(_graph.get)
+      println("\n\n\n+++ classic ShortestPathAlgorithm size: " + classicSSSP.getVertices.count())
 
       //val dynamicFullShortestPath = ShortestPathAlgorithm.runDynamic(_graph.get, addedEdges)
-      val dynamicFullShortestPath = SSSP.runDynamic(_graph.get, addedEdges)
-      println("\n\n\n+++ Dynamic ShortestPathAlgorithm size: " + dynamicFullShortestPath.size)
+      val dynamicSSSP = SSSP.runDynamic(_graph.get, addedEdges)
+      println("\n\n\n+++ Dynamic ShortestPathAlgorithm size: " + dynamicSSSP.getVertices.count())
 
       Array[Route]()
     }

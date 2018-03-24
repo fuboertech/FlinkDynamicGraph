@@ -14,7 +14,6 @@ import scala.collection.JavaConverters._
 
 class PageRankAlgorithm {
 
-
   private var _FullPageRank: Seq[(Integer, DoubleValue)] = _
 
   def runClassic(graph: Graph[Integer, Integer, Integer], border: org.apache.flink.api.java.DataSet[scala.Tuple2[Integer, DoubleValue]] = null, savePageRank: Boolean = true): Seq[(Integer, DoubleValue)] = {
