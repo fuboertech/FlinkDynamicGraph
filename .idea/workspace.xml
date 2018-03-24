@@ -2,55 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0116634f-dc09-4a3e-83d7-eb05bce43b46" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/SSSP.scala" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm.scala" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$8.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$runClassic$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$runDynamic$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$$anonfun$runDynamic$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$MinDistanceMessenger$$anonfun$sendMessages$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$MinDistanceMessenger$$anonfun$sendMessages$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$MinDistanceMessenger.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm$VertexDistanceUpdater.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ShortestPathAlgorithm.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anon$2$$anon$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anon$2$$anonfun$createSerializer$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anon$2.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/app/App$.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/app/App$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$3$$anon$1.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$3$$anon$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$3$$anonfun$createSerializer$1.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$3$$anonfun$createSerializer$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$3.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$4$$anon$2.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$4$$anon$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$4$$anonfun$createSerializer$2.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$4$$anonfun$createSerializer$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$4.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anon$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anonfun$3.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$$anonfun$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$GraphChangesApplier$.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator$GraphChangesApplier$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$1$$anonfun$apply$1.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$1$$anonfun$apply$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$1$$anonfun$apply$2.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$1$$anonfun$apply$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$1.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$2.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$3$$anonfun$apply$3.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$3$$anonfun$apply$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$3$$anonfun$apply$4.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$3$$anonfun$apply$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$3.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$4.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$5.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$construct$1.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph$$anonfun$construct$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph.class" afterPath="$PROJECT_DIR$/target/classes/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/routes.dat" afterPath="$PROJECT_DIR$/src/main/resources/routes.dat" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/app/App.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/app/App.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/routes.dat" afterPath="$PROJECT_DIR$/target/classes/routes.dat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/SSSP.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/SSSP.scala" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -94,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SSSP.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SSSP.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/SSSP.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1386">
-              <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+            <state relative-caret-position="25">
+              <caret line="95" column="2" lean-forward="false" selection-start-line="95" selection-start-column="2" selection-end-line="95" selection-end-column="2" />
               <folding>
                 <element signature="e#61#135#0" expanded="true" />
               </folding>
@@ -130,11 +83,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="36">
-              <caret line="2" column="9" lean-forward="false" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+              <caret line="2" column="9" lean-forward="true" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -225,9 +178,9 @@
         <option value="$PROJECT_DIR$/src/main/resources/airports.dat" />
         <option value="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/app/App.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/SSSP.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator.scala" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/SSSP.scala" />
       </list>
     </option>
   </component>
@@ -265,6 +218,63 @@
               <item name="FlinkDynamicGraph" type="b2602c69:ProjectViewProjectNode" />
               <item name="FlinkDynamicGraph" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlinkDynamicGraph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlinkDynamicGraph" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlinkDynamicGraph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlinkDynamicGraph" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlinkDynamicGraph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlinkDynamicGraph" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="flinkdynamicgraph" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlinkDynamicGraph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlinkDynamicGraph" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="flinkdynamicgraph" type="462c0819:PsiDirectoryNode" />
+              <item name="algorithms" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlinkDynamicGraph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlinkDynamicGraph" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="flinkdynamicgraph" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlinkDynamicGraph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlinkDynamicGraph" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="flinkdynamicgraph" type="462c0819:PsiDirectoryNode" />
+              <item name="graph" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlinkDynamicGraph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlinkDynamicGraph" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="flinkdynamicgraph" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -452,7 +462,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33627018" sideWeight="0.50572246" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33920705" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33920705" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32892805" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -864,16 +874,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/SSSP.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1386">
-          <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
-          <folding>
-            <element signature="e#61#135#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="307">
@@ -887,8 +887,18 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
-          <caret line="2" column="9" lean-forward="false" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+          <caret line="2" column="9" lean-forward="true" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/SSSP.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="95" column="2" lean-forward="false" selection-start-line="95" selection-start-column="2" selection-end-line="95" selection-end-column="2" />
+          <folding>
+            <element signature="e#61#135#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

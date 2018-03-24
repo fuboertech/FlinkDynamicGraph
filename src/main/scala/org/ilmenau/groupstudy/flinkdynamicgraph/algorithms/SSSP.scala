@@ -93,18 +93,13 @@ object SSSP {
 
     modifiedGraph.getVertices.collect().toSeq.map(f => Tuple2[Integer, DoubleValue](f.getId, new DoubleValue(f.getValue)))
   }
-
-//  def isInSSSSP(edgeToBeChaged: Edge[Integer, Integer], edgesInSSSP: DataSet[Edge[Integer, Integer]]): Boolean = {
-//    if(edgesInSSSP.filter(f => f.equals(edgeToBeChaged)).count() > 0)
-//      return true
-//    else
-//      return false
-//  }
+  
 
   private final class RecalculateMessenger(var edgesToBeChanged: Seq[Edge[Integer, Integer]]) extends ScatterFunction[Integer, Double, Double, Integer] {
     override def sendMessages(vertex: Vertex[Integer, Double]) {
-      for(edge <- edgesToBeChanged)
-          if (vertex.getId.equals(edge.getTarget)){
+      if (vertex.getValue < Double.PositiveInfinity)
+        for(edge <- edgesToBeChanged)
+          if (vertex.getId.equals(edge.getSource)){
             sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
           }
     }
