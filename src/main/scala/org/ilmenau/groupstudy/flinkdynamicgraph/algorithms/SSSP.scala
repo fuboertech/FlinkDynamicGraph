@@ -58,7 +58,7 @@ object SSSP {
   private final class VertexDistanceUpdater extends GatherFunction[Integer, Integer, Integer] {
 
     override def updateVertex(vertex: Vertex[Integer, Integer], inMessages: MessageIterator[Integer]) {
-      var minDistance = Integer.MAX_VALUE
+      var minDistance = vertex.getValue
       while (inMessages.hasNext) {
         val msg = inMessages.next
         if (msg < minDistance) {
@@ -86,8 +86,6 @@ object SSSP {
 
       val a =modifiedGraph.getVertices.count()
       val b = modifiedGraph.getVertices.filter(v => v.getValue == Integer.MAX_VALUE).count()
-
-
 
       if(b == a-1){
         modifiedGraph = modifiedGraph.runScatterGatherIteration(new MinDistanceMessenger, new VertexDistanceUpdater, maxIterations)
