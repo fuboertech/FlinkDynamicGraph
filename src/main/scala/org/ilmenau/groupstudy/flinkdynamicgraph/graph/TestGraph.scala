@@ -19,16 +19,20 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
   var edges: DataSet[Edge[Integer, Integer]] = _
 
   def construct(): Unit = {
-
-    edges = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, j.airlineID))
+    val start = 1
+    val end   = 5
+    val rnd = new scala.util.Random
+    edges = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, new Integer(start + rnd.nextInt( (end - start) + 1 ))))
 
     // from: source airport id, to: dest airport id, value: airlineID
+
     val vertices = env.fromCollection(Seq.range(1,12).union(Seq.range(20,24)))
       .map(a => new Vertex(new Integer(a), new Integer(0)))
 
 
     val e = edges.filter(e => !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getSource) &&
       !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getTarget))
+
 
     graph = Graph.fromDataSet(vertices, e, env)
     //_fullPageRank = PageRankAlgorithm.runClassic(graph)
@@ -56,6 +60,7 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
         }
         (dynamic._1, dynamic._2, classic._2)
     }.collect()
+
     e.toSeq
   }
 

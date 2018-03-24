@@ -24,12 +24,13 @@ object ConnectedComponentsAlgorithm {
 
   private var _disjointSet: DisjointDataSet[Integer] = _
 
+
   def runClassic(graph: Graph[Integer, Integer, Integer]): Seq[(Integer, Integer)] = {
     val result = graph.run(new GSAConnectedComponents[Integer, Integer, Integer](100)).collect().asScala.toSeq.map(v => (v.getId, v.getValue))
     result
   }
 
-  def runDynamic(graph: Graph[Integer, Integer, Integer], addedEdges: Seq[Edge[Integer, Integer]]): Seq[(Integer, Integer)] = {
+  def runDynamic(graph: Graph[Integer, Double, Integer], addedEdges: Seq[Edge[Integer, Integer]]): Seq[(Integer, Integer)] = {
     if (_disjointSet == null) {
       _disjointSet = new DisjointDataSet[Integer](mutable.HashMap.empty[Integer, Integer])
       graph.getVertices.collect().foreach(e => _disjointSet.makeSet(e.getId))

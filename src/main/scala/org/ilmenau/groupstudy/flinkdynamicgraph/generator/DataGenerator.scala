@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.scala.{StreamExecutionEnvironment, _}
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.util.Collector
-import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.{ConnectedComponentsAlgorithm, PageRankAlgorithm}
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.{ConnectedComponentsAlgorithm, PageRankAlgorithm, SSSP}
 import org.ilmenau.groupstudy.flinkdynamicgraph.graph.AbstractGraph
 import org.ilmenau.groupstudy.flinkdynamicgraph.loader.DataLoader
 import org.ilmenau.groupstudy.flinkdynamicgraph.model.data.Route
@@ -29,7 +29,7 @@ object DataGenerator {
 
     var pagerankAlg: PageRankAlgorithm = _
 
-   // val connectedComponentsAlg: ConnectedComponentsAlgorithm = ConnectedComponentsAlgorithm
+    // val connectedComponentsAlg: ConnectedComponentsAlgorithm = ConnectedComponentsAlgorithm
 
     protected def changeGraphModel(values: Iterable[Route]): Array[Route] = {
       if (pagerankAlg == null) {
@@ -41,18 +41,28 @@ object DataGenerator {
       var addedEdges = _graph.addEdges(values)
 
 
-      val classicPageRank = pagerankAlg.runClassic(_graph.get)
-      println("\n\n\n+++ classic PageRank size: " + classicPageRank.size)
+//      val classicPageRank = pagerankAlg.runClassic(_graph.get)
+//      println("\n\n\n+++ classic PageRank size: " + classicPageRank.size)
+
 
       val dynamicPageRank = pagerankAlg.runDynamic(_graph.get, addedEdges, _graph.env).toSeq
       println("\n\n\n+++ dynamic PageRank size: " + dynamicPageRank.size)
 
-      val classicConnectedComponents = ConnectedComponentsAlgorithm.runClassic(_graph.get)
-      println("\n\n\n+++ classic ConnectedComponents size: " + classicConnectedComponents.size)
 
-      val dynamicConnectedComponents = ConnectedComponentsAlgorithm.runDynamic(_graph.get, addedEdges)
-      println("\n\n\n+++ dynamic ConnectedComponents size: " + dynamicConnectedComponents.size)
+//      val classicConnectedComponents = ConnectedComponentsAlgorithm.runClassic(_graph.get)
+//      println("\n\n\n+++ classic ConnectedComponents size: " + classicConnectedComponents.size)
+//
+//      val dynamicConnectedComponents = ConnectedComponentsAlgorithm.runDynamic(_graph.get, addedEdges)
+//      println("\n\n\n+++ dynamic ConnectedComponents size: " + dynamicConnectedComponents.size)
 
+
+      //val fullShortestPath = ShortestPathAlgorithm.runClassic(_graph.get)
+      val fullShortestPath = SSSP.runClassic(_graph.get)
+      println("\n\n\n+++ classic ShortestPathAlgorithm size: " + fullShortestPath.size)
+
+      //val dynamicFullShortestPath = ShortestPathAlgorithm.runDynamic(_graph.get, addedEdges)
+      val dynamicFullShortestPath = SSSP.runDynamic(_graph.get, addedEdges)
+      println("\n\n\n+++ Dynamic ShortestPathAlgorithm size: " + dynamicFullShortestPath.size)
 
       Array[Route]()
     }
@@ -75,13 +85,13 @@ object DataGenerator {
     input.timeWindowAll(Time.of(timeWindowLength, TimeUnit.MILLISECONDS)).apply(GraphChangesApplier)
 
     // TODO:  assync version. check on cluster
-//    val asyncMapped = AsyncDataStream.orderedWait(input, 10000L, TimeUnit.MILLISECONDS, 10) {
-//      (input, collector: AsyncCollector[Route]) =>
-//        Future {
-//          collector.collect(Seq(input))
-//        } (ExecutionContext.global)
-//    }
-//    asyncMapped.timeWindowAll(Time.of(5000, TimeUnit.MILLISECONDS)).apply(new GraphModelBuilder)
+    //    val asyncMapped = AsyncDataStream.orderedWait(input, 10000L, TimeUnit.MILLISECONDS, 10) {
+    //      (input, collector: AsyncCollector[Route]) =>
+    //        Future {
+    //          collector.collect(Seq(input))
+    //        } (ExecutionContext.global)
+    //    }
+    //    asyncMapped.timeWindowAll(Time.of(5000, TimeUnit.MILLISECONDS)).apply(new GraphModelBuilder)
   }
 
   private def generateRoutes(ctx: SourceContext[Route]): Unit = {

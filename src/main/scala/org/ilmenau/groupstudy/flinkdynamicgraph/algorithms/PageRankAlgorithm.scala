@@ -4,13 +4,16 @@ import org.apache.flink.api.scala._
 import org.apache.flink.graph.Edge
 import org.apache.flink.graph.scala.Graph
 import org.apache.flink.types.DoubleValue
-import org.ilmenau.groupstudy.flinkdynamicgraph.model.data.Airport
+import org.apache.flink.api.scala._
+import org.ilmenau.groupstudy.flinkdynamicgraph.graph.AbstractGraph
 import org.apache.flink.api.java.{Utils, DataSet => JavaDataSet}
 import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.util.PageRank
+
 
 import scala.collection.JavaConverters._
 
 class PageRankAlgorithm {
+
 
   private var _FullPageRank: Seq[(Integer, DoubleValue)] = _
 
@@ -63,7 +66,9 @@ class PageRankAlgorithm {
 //    })
 
     val q = vq.union(vb).distinct
+
 //    output.append("\nq: " + q.sortBy(f => f.intValue()))
+
     val subgraph: Graph[Integer, Integer, Integer] = graph.subgraph(v => q.contains(v.getId),
       e => q.contains(e.getSource) && q.contains(e.getTarget))
 //    output.append("\nsgv:" + subgraph.getVertices.collect().toString())

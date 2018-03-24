@@ -2,6 +2,7 @@ package org.ilmenau.groupstudy.flinkdynamicgraph.loader
 
 import java.io._
 
+import org.apache.flink.api.common.functions.MapFunction
 import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment}
 import org.apache.flink.streaming.api.scala._
 import org.ilmenau.groupstudy.flinkdynamicgraph.model.data.{Airline, Airport, Route}
@@ -35,7 +36,7 @@ object DataLoader {
       getPath("/test_cc.dat"))
   }
 
-  def routes: DataSet[Route] = _routes
+  def routes: DataSet[Route] = _routes.filter(r => r.destAirportID != -1 && r.sourceAirportID != -1)
 
   def airlines: DataSet[Airline] = _airlines
 

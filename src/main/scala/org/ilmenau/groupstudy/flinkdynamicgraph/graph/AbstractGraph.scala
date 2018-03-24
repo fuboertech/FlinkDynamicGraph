@@ -13,4 +13,5 @@ abstract class AbstractGraph(var env: ExecutionEnvironment) {
 
   def get: Graph[Integer, Integer, Integer] = graph
 
+
 }
