@@ -19,8 +19,10 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
   var edges: DataSet[Edge[Integer, Integer]] = _
 
   def construct(): Unit = {
-
-    edges = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, j.airlineID))
+    val start = 1
+    val end   = 5
+    val rnd = new scala.util.Random
+    edges = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, new Integer(start + rnd.nextInt( (end - start) + 1 ))))
 
     // from: source airport id, to: dest airport id, value: airlineID
     //val vertices = env.fromCollection(Seq.range(1,12).union(Seq.range(20,24)))
@@ -43,7 +45,7 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
     val e = edges.filter(e => Seq.range(12, 20).map(i=>new Integer(i)).contains(e.getSource) ||
       Seq.range(12, 20).map(i=>new Integer(i)).contains(e.getTarget)).collect()
     val v = env.fromCollection(Seq.range(12,20).map(i=>new Integer(i))
-      .map(a => new Vertex(a, Airport(0, "a", "b", "c", "d", "e", 0, 0, 0, "f", "g", "h", "i")))).collect()
+      .map(a => new Vertex(a, Double.PositiveInfinity)))
 
     //    graph = graph.addVertices(v.toList).addEdges(e.toList).subgraph(v => true, e => true)
     //    println("Graph edges: " + graph.getEdges.count() + "\n")

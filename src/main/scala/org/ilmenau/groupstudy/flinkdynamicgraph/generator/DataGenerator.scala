@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.scala.{StreamExecutionEnvironment, _}
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.util.Collector
-import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.{ConnectedComponentsAlgorithm, PageRankAlgorithm, ShortestPathAlgorithm}
+import org.ilmenau.groupstudy.flinkdynamicgraph.algorithms.{ConnectedComponentsAlgorithm, PageRankAlgorithm, SSSP}
 import org.ilmenau.groupstudy.flinkdynamicgraph.graph.AbstractGraph
 import org.ilmenau.groupstudy.flinkdynamicgraph.loader.DataLoader
 import org.ilmenau.groupstudy.flinkdynamicgraph.model.data.Route
@@ -54,10 +54,12 @@ object DataGenerator {
 //      println("\n\n\n+++ dynamic ConnectedComponents size: " + dynamicConnectedComponents.size)
 
 
-      val fullShortestPath = ShortestPathAlgorithm.runClassic(_graph.get)
+      //val fullShortestPath = ShortestPathAlgorithm.runClassic(_graph.get)
+      val fullShortestPath = SSSP.runClassic(_graph.get)
       println("\n\n\n+++ classic ShortestPathAlgorithm size: " + fullShortestPath.size)
 
-      val dynamicFullShortestPath = ShortestPathAlgorithm.runDynamic(_graph.get, addedEdges)
+      //val dynamicFullShortestPath = ShortestPathAlgorithm.runDynamic(_graph.get, addedEdges)
+      val dynamicFullShortestPath = SSSP.runDynamic(_graph.get, addedEdges)
       println("\n\n\n+++ Dynamic ShortestPathAlgorithm size: " + dynamicFullShortestPath.size)
 
       Array[Route]()
