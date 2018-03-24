@@ -84,7 +84,7 @@ object SSSP {
         Integer.MAX_VALUE
       })
 
-      val a =modifiedGraph.getVertices.count()
+      val a = modifiedGraph.getVertices.count()
       val b = modifiedGraph.getVertices.filter(v => v.getValue == Integer.MAX_VALUE).count()
 
       if(b == a-1){
