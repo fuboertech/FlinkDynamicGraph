@@ -7,11 +7,11 @@ import org.ilmenau.groupstudy.flinkdynamicgraph.model.data.{Airport, Route}
 
 abstract class AbstractGraph(var env: ExecutionEnvironment) {
 
-  protected var graph: Graph[Integer, Double, Integer] = _
+  protected var graph: Graph[Integer, Integer, Integer] = _
 
   def addEdges(routes: Iterable[Route]): Seq[Edge[Integer, Integer]]
 
-  def get: Graph[Integer, Double, Integer] = graph
+  def get: Graph[Integer, Integer, Integer] = graph
 
 
 }

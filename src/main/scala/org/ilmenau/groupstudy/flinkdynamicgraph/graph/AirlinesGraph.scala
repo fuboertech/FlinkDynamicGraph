@@ -16,7 +16,7 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
 
   def construct(): Unit = {
     // key: airport id, value: Airport object
-    val vertices = DataLoader.airports.map(a => new Vertex(a.airportID, Double.PositiveInfinity))
+    val vertices = DataLoader.airports.map(a => new Vertex(a.airportID, new Integer(0)))
 
     // val routesWithAirlines = DataLoader.routes.join(DataLoader.airlines).where(1).equalTo(0)
 
@@ -28,7 +28,7 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
 
     //    graph = Graph.fromDataSet(edges, new IdentityMapper[Integer](), env)
 //    graph = Graph.fromDataSet(edges, new IdentityMapper[Integer](), env)
-    graph = Graph.fromDataSet[Integer, Double, Integer](vertices, edges, env)
+    graph = Graph.fromDataSet[Integer, Integer, Integer](vertices, edges, env)
   }
 
   override def addEdges(routes: Iterable[Route]): Seq[Edge[Integer, Integer]] = {

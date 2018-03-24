@@ -17,14 +17,14 @@ class PageRankAlgorithm {
 
   private var _FullPageRank: Seq[(Integer, DoubleValue)] = _
 
-  def runClassic(graph: Graph[Integer, Double, Integer], border: org.apache.flink.api.java.DataSet[scala.Tuple2[Integer, DoubleValue]] = null): Seq[(Integer, DoubleValue)] = {
-    val result = graph.run(new PageRank[Integer, Double, Integer](0.85, 100, 0.001, border)).collect().asScala.toSeq
+  def runClassic(graph: Graph[Integer, Integer, Integer], border: org.apache.flink.api.java.DataSet[scala.Tuple2[Integer, DoubleValue]] = null): Seq[(Integer, DoubleValue)] = {
+    val result = graph.run(new PageRank[Integer, Integer, Integer](0.85, 100, 0.001, border)).collect().asScala.toSeq
     _FullPageRank = result.map(f => Tuple2[Integer, DoubleValue](f.getVertexId0, f.getPageRankScore))
     _FullPageRank
   }
 
   // TODO: Not working properly 
-  def runDynamic(graph: Graph[Integer, Double, Integer], addedEdges: Seq[Edge[Integer, Integer]], env: ExecutionEnvironment): Seq[(Integer, DoubleValue)] = {
+  def runDynamic(graph: Graph[Integer, Integer, Integer], addedEdges: Seq[Edge[Integer, Integer]], env: ExecutionEnvironment): Seq[(Integer, DoubleValue)] = {
     val output = new StringBuilder
 
     var vc: Seq[Integer] = Seq.range(12, 20).map(i => new Integer(i))
@@ -73,7 +73,7 @@ class PageRankAlgorithm {
     val q = vq.union(vb).distinct
     output.append("\nq: " + q.sortBy(f => f.intValue()))
 
-    val subgraph: Graph[Integer, Double, Integer] = graph.subgraph(v => q.contains(v.getId),
+    val subgraph: Graph[Integer, Integer, Integer] = graph.subgraph(v => q.contains(v.getId),
       e => q.contains(e.getSource) && q.contains(e.getTarget))
     output.append("\nsgv:" + subgraph.getVertices.collect().toString())
     output.append("\nsge:" + subgraph.getEdges.collect().toString())

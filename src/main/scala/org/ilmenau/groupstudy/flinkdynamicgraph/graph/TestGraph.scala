@@ -33,11 +33,11 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
       !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getTarget))
 
 
-    val vertices = env.fromCollection(Seq.range(1,12).union(Seq.range(20,24)))
-      .map(a => new Vertex(new Integer(a), Double.PositiveInfinity))
+    //val vertices = env.fromCollection(Seq.range(1,12).union(Seq.range(20,24)))
+    //  .map(a => new Vertex(new Integer(a), Double.PositiveInfinity))
 
-    graph = Graph.fromDataSet[Integer, Double, Integer](vertices, edges, env)
-    //graph = Graph.fromDataSet(e, new IdentityMapper[Integer](), env)
+    //graph = Graph.fromDataSet[Integer, Double, Integer](vertices, edges, env)
+    graph = Graph.fromDataSet(e, new IdentityMapper[Integer](), env)
     //_fullPageRank = PageRankAlgorithm.runClassic(graph)
   }
 

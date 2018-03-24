@@ -12,14 +12,14 @@ import scala.collection.JavaConversions._
 
 
 object SSSP {
-  def runClassic(graph: Graph[Integer, Double, Integer]): Seq[(Integer, DoubleValue)] = {
+  def runClassic(graph: Graph[Integer, Integer, Integer]): Seq[(Integer, Integer)] = {
     val srcId = 1
 
     var modifiedGraph = graph
     modifiedGraph = graph.mapVertices(v => if (v.getId.equals(srcId)) {
       0
     } else {
-      Double.PositiveInfinity
+      Integer.MAX_VALUE
     })
 
     val maxIterations = 5
@@ -28,17 +28,17 @@ object SSSP {
     val singleSourceShortestPaths = result.getVertices
     singleSourceShortestPaths.print()
 
-    singleSourceShortestPaths.collect().toSeq.map(f => Tuple2[Integer, DoubleValue](f.getId, new DoubleValue(f.getValue)))
+    singleSourceShortestPaths.collect().toSeq.map(f => Tuple2[Integer, Integer](f.getId, f.getValue))
   }
 
   // --------------------------------------------------------------------------------------------
   //  Single Source Shortest Path UDFs
   // --------------------------------------------------------------------------------------------
 
-  private final class MinDistanceMessenger extends ScatterFunction[Integer, Double, Double, Integer] {
+  private final class MinDistanceMessenger extends ScatterFunction[Integer, Integer, Integer, Integer] {
 
-    override def sendMessages(vertex: Vertex[Integer, Double]) {
-      if (vertex.getValue < Double.PositiveInfinity)
+    override def sendMessages(vertex: Vertex[Integer, Integer]) {
+      if (vertex.getValue < Integer.MAX_VALUE)
         for (edge: Edge[Integer, Integer] <- getEdges) {
           sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
         }
@@ -49,10 +49,10 @@ object SSSP {
     * Function that updates the value of a vertex by picking the minimum
     * distance from all incoming messages.
     */
-  private final class VertexDistanceUpdater extends GatherFunction[Integer, Double, Double] {
+  private final class VertexDistanceUpdater extends GatherFunction[Integer, Integer, Integer] {
 
-    override def updateVertex(vertex: Vertex[Integer, Double], inMessages: MessageIterator[Double]) {
-      var minDistance = Double.MaxValue
+    override def updateVertex(vertex: Vertex[Integer, Integer], inMessages: MessageIterator[Integer]) {
+      var minDistance = Integer.MAX_VALUE
       while (inMessages.hasNext) {
         val msg = inMessages.next
         if (msg < minDistance) {
@@ -66,18 +66,18 @@ object SSSP {
   }
 
   // dynamic
-  def runDynamic(graph: Graph[Integer, Double, Integer], addedEdges: Seq[Edge[Integer, Integer]]) = {
+  def runDynamic(graph: Graph[Integer, Integer, Integer], addedEdges: Seq[Edge[Integer, Integer]]) = {
     var modifiedGraph = graph
     val srcId = 1
 
     modifiedGraph = graph.mapVertices(v => if (v.getId.equals(srcId)) {
       0
     } else {
-      Double.PositiveInfinity
+      Integer.MAX_VALUE
     })
 
     val a =modifiedGraph.getVertices.count()
-    val b = modifiedGraph.getVertices.filter(v => v.getValue == Double.PositiveInfinity).count()
+    val b = modifiedGraph.getVertices.filter(v => v.getValue == Integer.MAX_VALUE).count()
 
     val maxIterations = 5
 
@@ -91,13 +91,13 @@ object SSSP {
     modifiedGraph.getVertices.print()
 
 
-    modifiedGraph.getVertices.collect().toSeq.map(f => Tuple2[Integer, DoubleValue](f.getId, new DoubleValue(f.getValue)))
+    modifiedGraph.getVertices.collect().toSeq.map(f => Tuple2[Integer, Integer](f.getId, f.getValue))
   }
-  
 
-  private final class RecalculateMessenger(var edgesToBeChanged: Seq[Edge[Integer, Integer]]) extends ScatterFunction[Integer, Double, Double, Integer] {
-    override def sendMessages(vertex: Vertex[Integer, Double]) {
-      if (vertex.getValue < Double.PositiveInfinity)
+
+  private final class RecalculateMessenger(var edgesToBeChanged: Seq[Edge[Integer, Integer]]) extends ScatterFunction[Integer, Integer, Integer, Integer] {
+    override def sendMessages(vertex: Vertex[Integer, Integer]) {
+      if (vertex.getValue < Integer.MAX_VALUE)
         for(edge <- edgesToBeChanged)
           if (vertex.getId.equals(edge.getSource)){
             sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
