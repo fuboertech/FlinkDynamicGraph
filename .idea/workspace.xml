@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0116634f-dc09-4a3e-83d7-eb05bce43b46" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ConnectedComponentsAlgorithm.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/ConnectedComponentsAlgorithm.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/PageRankAlgorithm.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/PageRankAlgorithm.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/util/PageRank.java" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/algorithms/util/PageRank.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/app/App.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/app/App.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/generator/DataGenerator.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/graph/AirlinesGraph.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/graph/AirlinesGraph.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/ilmenau/groupstudy/flinkdynamicgraph/graph/TestGraph.scala" />
-    </list>
+    <list default="true" id="0116634f-dc09-4a3e-83d7-eb05bce43b46" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
