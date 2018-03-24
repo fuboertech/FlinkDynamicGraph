@@ -12,27 +12,23 @@ import scala.collection.JavaConversions._
 
 
 object SSSP {
-  var _classicSSSP: Graph[Integer, Integer, Integer] = _
+  //var _classicSSSP: Graph[Integer, Integer, Integer] = _
   var _dynamicSSSP: Graph[Integer, Integer, Integer] = _
 
   def runClassic(graph: Graph[Integer, Integer, Integer]): Graph[Integer, Integer, Integer] = {
     val srcId = 1
 
     var modifiedGraph = graph
-    if (_classicSSSP == null) {
-      modifiedGraph = graph.mapVertices(v => if (v.getId.equals(srcId)) {
-        0
-      } else {
-        Integer.MAX_VALUE
-      })
+    modifiedGraph = modifiedGraph.mapVertices(v => if (v.getId.equals(srcId)) {
+      0
     } else {
-      modifiedGraph = _classicSSSP
-    }
+      Integer.MAX_VALUE
+    })
 
     val maxIterations = 5
     val result = modifiedGraph.runScatterGatherIteration(new MinDistanceMessenger, new VertexDistanceUpdater, maxIterations)
 
-    _classicSSSP = result
+    //_classicSSSP = result
 
     val singleSourceShortestPaths = result.getVertices
     singleSourceShortestPaths.print()
