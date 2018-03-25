@@ -42,30 +42,30 @@ object DataGenerator {
       var addedEdges = _graph.addEdges(values)
 
 
-//      val classicPageRank = pagerankAlg.runClassic(_graph.get)
-//      println("\n\n\n+++ classic PageRank size: " + classicPageRank.size)
-//
-//
-//      val dynamicPageRank = pagerankAlg.runDynamic(_graph.get, addedEdges, _graph.env).toSeq
-//      println("\n\n\n+++ dynamic PageRank size: " + dynamicPageRank.size)
-//
-//
-//      val classicConnectedComponents = ConnectedComponentsAlgorithm.runClassic(_graph.get)
-//      println("\n\n\n+++ classic ConnectedComponents size: " + classicConnectedComponents.size)
-//
-//      val dynamicConnectedComponents = ConnectedComponentsAlgorithm.runDynamic(_graph.get, addedEdges)
-//      println("\n\n\n+++ dynamic ConnectedComponents size: " + dynamicConnectedComponents.size)
+      val classicPageRank = pagerankAlg.runClassic(_graph.get)
+      println("\n\n\n+++ classic PageRank size: " + classicPageRank.size)
 
 
-      //val fullShortestPath = ShortestPathAlgorithm.runClassic(_graph.get)
+      val dynamicPageRank = pagerankAlg.runDynamic(_graph.get, addedEdges, _graph.env).toSeq
+      println("\n\n\n+++ dynamic PageRank size: " + dynamicPageRank.size)
+
+
+      val classicConnectedComponents = ConnectedComponentsAlgorithm.runClassic(_graph.get)
+      println("\n\n\n+++ classic ConnectedComponents size: " + classicConnectedComponents.size)
+
+      val dynamicConnectedComponents = ConnectedComponentsAlgorithm.runDynamic(_graph.get, addedEdges)
+      println("\n\n\n+++ dynamic ConnectedComponents size: " + dynamicConnectedComponents.size)
+
+
       var timeNow = System.currentTimeMillis()
       val classicSSSP = SSSP.runClassic(_graph.get)
       println("\n\n\n+++ classic ShortestPathAlgorithm size: " + classicSSSP.getVertices.count() + " Time:" + (System.currentTimeMillis() - timeNow))
+      Thread.sleep(2000)
 
       timeNow = System.currentTimeMillis()
-      //val dynamicFullShortestPath = ShortestPathAlgorithm.runDynamic(_graph.get, addedEdges)
       val dynamicSSSP = SSSP.runDynamic(_graph.get, addedEdges)
       println("\n\n\n+++ Dynamic ShortestPathAlgorithm size: " + dynamicSSSP.getVertices.count() + " Time:" + (System.currentTimeMillis() - timeNow))
+      Thread.sleep(2000)
 
       Array[Route]()
     }

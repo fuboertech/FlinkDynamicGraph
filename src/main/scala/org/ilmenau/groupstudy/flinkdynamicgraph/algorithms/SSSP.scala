@@ -6,29 +6,33 @@ import org.apache.flink.graph.scala._
 import org.apache.flink.graph.scala.utils.Tuple3ToEdgeMap
 import org.apache.flink.graph.{Edge, Vertex}
 import org.apache.flink.types.DoubleValue
+import org.apache.flink.api.scala.DataSet
 import org.apache.flink.graph.spargel.{GatherFunction, MessageIterator, ScatterFunction}
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 
 object SSSP {
-  //var _classicSSSP: Graph[Integer, Integer, Integer] = _
   var _dynamicSSSP: Graph[Integer, Integer, Integer] = _
+
+  var changedVertices: ListBuffer[Vertex[Integer, Integer]] = new ListBuffer[Vertex[Integer, Integer]]
 
   def runClassic(graph: Graph[Integer, Integer, Integer]): Graph[Integer, Integer, Integer] = {
     val srcId = 1
+    changedVertices = new ListBuffer[Vertex[Integer, Integer]]
 
     var modifiedGraph = graph
+
     modifiedGraph = modifiedGraph.mapVertices(v => if (v.getId.equals(srcId)) {
       0
     } else {
       Integer.MAX_VALUE
     })
 
-    val maxIterations = 5
+    val maxIterations = 3
     val result = modifiedGraph.runScatterGatherIteration(new MinDistanceMessenger, new VertexDistanceUpdater, maxIterations)
-
-    //_classicSSSP = result
 
     val singleSourceShortestPaths = result.getVertices
     singleSourceShortestPaths.print()
@@ -44,9 +48,9 @@ object SSSP {
   private final class MinDistanceMessenger extends ScatterFunction[Integer, Integer, Integer, Integer] {
 
     override def sendMessages(vertex: Vertex[Integer, Integer]) {
-      if (vertex.getValue < Integer.MAX_VALUE)
         for (edge: Edge[Integer, Integer] <- getEdges) {
-          sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
+          if (vertex.getValue < Integer.MAX_VALUE)
+            sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
         }
     }
   }
@@ -67,6 +71,7 @@ object SSSP {
       }
       if (vertex.getValue > minDistance) {
         setNewVertexValue(minDistance)
+        changedVertices += vertex
       }
     }
   }
@@ -74,7 +79,9 @@ object SSSP {
   // dynamic
   def runDynamic(graph: Graph[Integer, Integer, Integer], addedEdges: Seq[Edge[Integer, Integer]]): Graph[Integer, Integer, Integer] = {
     val srcId = 1
-    val maxIterations = 5
+    val maxIterations = 3
+
+    changedVertices = new ListBuffer[Vertex[Integer, Integer]]
 
     var modifiedGraph = graph
     if (_dynamicSSSP == null) {
@@ -92,7 +99,8 @@ object SSSP {
       }
 
     } else {
-      modifiedGraph = _dynamicSSSP
+      var savedVertices = _dynamicSSSP.getVertices.map(vv => (vv.getId, vv.getValue))
+      modifiedGraph = graph.joinWithVertices(savedVertices, (graphVal: Integer, savedVal: Integer) => savedVal)
     }
 
     modifiedGraph = modifiedGraph.runScatterGatherIteration(new RecalculateMessenger(addedEdges), new VertexDistanceUpdater, maxIterations)
@@ -105,17 +113,23 @@ object SSSP {
     return  modifiedGraph
   }
 
-
   private final class RecalculateMessenger(var edgesToBeChanged: Seq[Edge[Integer, Integer]]) extends ScatterFunction[Integer, Integer, Integer, Integer] {
     override def sendMessages(vertex: Vertex[Integer, Integer]) {
-      if (vertex.getValue < Integer.MAX_VALUE)
-        for(edge <- edgesToBeChanged)
-          if (vertex.getId.equals(edge.getSource)){
+      if (vertex.getValue < Integer.MAX_VALUE) {
+        for (edge <- edgesToBeChanged) {
+          if (vertex.getId.equals(edge.getSource)) {
             sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
           }
+        }
+
+        if(changedVertices.contains(vertex)){
+          changedVertices -= vertex
+          for(edge <- getEdges)
+            sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
+        }
+      }
     }
   }
-
 }
 
 
