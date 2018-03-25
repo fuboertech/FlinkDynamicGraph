@@ -124,7 +124,7 @@ object SSSP {
 
         if(changedVertices.contains(vertex)){
           changedVertices -= vertex
-          for(edge <- getEdges)
+          for(edge <- getEdges.filter(e => !edgesToBeChanged.contains(e)))
             sendMessageTo(edge.getTarget, vertex.getValue + edge.getValue)
         }
       }
