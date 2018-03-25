@@ -25,7 +25,7 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
     val rnd = new scala.util.Random
     // from: source airport id, to: dest airport id, value: airlineID
 
-    val edges = DataLoader.routes.map(j => new Edge(j.sourceAirportID, j.destAirportID, new Integer(start + rnd.nextInt( (end - start) + 1 )) ))
+    val edges = DataLoader.routes.map(r => (r.sourceAirportID, r.destAirportID)).distinct.map(j => new Edge(j._1, j._2, new Integer(start + rnd.nextInt( (end - start) + 1 )) ))
 
 
     //    graph = Graph.fromDataSet(edges, new IdentityMapper[Integer](), env)
@@ -41,7 +41,7 @@ class AirlinesGraph(env: ExecutionEnvironment) extends AbstractGraph(env: Execut
 //  }
 
   override def addEdges(routes: Iterable[Route]): Seq[Edge[Integer, Integer]] = {
-    val edges = env.fromCollection(routes)
+    val edges = env.fromCollection(routes).first(2)
       .map(j => new Edge(j.sourceAirportID, j.destAirportID, new Integer(0)))
     val addedEdges = edges.collect()
     graph = graph.addEdges(addedEdges.toList)

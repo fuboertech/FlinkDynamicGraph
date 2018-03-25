@@ -23,18 +23,27 @@ class TestGraph(env: ExecutionEnvironment) extends AbstractGraph(env: ExecutionE
     val end   = 5
     val rnd = new scala.util.Random
     edges = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, new Integer(start + rnd.nextInt( (end - start) + 1 ))))
+    val edges2 = DataLoader.testGraphEdtes.map(j => new Edge(j.sourceAirportID, j.destAirportID, new Integer(0)))
 
     // from: source airport id, to: dest airport id, value: airlineID
 
     val vertices = env.fromCollection(Seq.range(1,12).union(Seq.range(20,24)))
       .map(a => new Vertex(new Integer(a), new Integer(0)))
 
+    val vertices2 = env.fromCollection(Seq.range(1,12).union(Seq.range(20,24)))
+      .map(a => new Vertex(new Integer(a), new Integer(0)))
 
     val e = edges.filter(e => !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getSource) &&
       !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getTarget))
 
+    val e2 = edges2.filter(e => !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getSource) &&
+      !Seq.range(12,20).map(i=>new Integer(i)).contains(e.getTarget))
+
 
     graph = Graph.fromDataSet(vertices, e, env)
+    val graph2 = Graph.fromDataSet(vertices2, e2, env)
+
+//    graph2.run(new GSAPageRank[Integer]())
     //_fullPageRank = PageRankAlgorithm.runClassic(graph)
   }
 
